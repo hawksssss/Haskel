@@ -1,0 +1,69 @@
+==============================================================
+== General Setup (v0.1)
+==============================================================
+
+Welcome to CS 421! Before we can get started, you'll need to set up your
+environment with at least both git and Haskell. (We'll cover the latter later.)
+
+==============================================================
+== Part One: Installing git
+==============================================================
+
+If you haven't yet, you should setup your local Git... setup so that things show
+up in a nice and proper fashion.
+
+================================
+== Windows (CLI)
+================================
+
+1) Download the executable here: https://git-scm.com/download/win
+2) Follow the appropriate instructions to install and set it up.
+
+================================
+== Mac OS X (CLI)
+================================
+
+1) Install Homebrew: http://brew.sh/
+2) After installing Homebrew, fire up a terminal and run:
+
+        brew install git
+
+3) Follow the instructions given.
+4) You're all set!
+
+================================
+== Linux (CLI)
+================================
+
+1) TBA
+
+==============================================================
+== Part Two: git & Local Setup
+==============================================================
+
+More concretely:
+
+1) Open up a Terminal/your git executable.
+2) Modify the following two lines.
+2) Execute them!
+
+     git config --global user.name "YOUR NAME"
+     git config --global user.email "NETID@illinois.edu"
+
+Now, you'll want to navigate (in your Terminal/git executable) to the place you
+want your repository to reside. Note that it contains your assignments folder
+and whatnot, so it should be one level above where you think it should be.
+
+Now that you've done that, you'll want to grab a copy of your repository. How do
+you do this? Well, by going:
+
+     git clone git@gitlab-beta.engr.illinois.edu:cs421-sp2016/NETID.git
+
+OR, if you want to rename the directory to something that's NOT your NetID:
+
+     git clone git@gitlab-beta.engr.illinois.edu:cs421-sp2016/NETID.git NEWNAME
+
+This will create a copy of the repository to your current directory, named
+either as your NetID or the name you've specified. And if you dig around, you
+should find this file in there too! :)
+
