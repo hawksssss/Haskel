@@ -43,6 +43,9 @@ prop_sumlist xs = sumlist xs == List.sum xs
 prop_myzip :: [Int] -> [Int] -> Bool
 prop_myzip xs ys = zip xs ys == List.zip xs ys
 
+prop_addpairs :: [Int] -> [Int] -> Bool
+prop_addpairs xs ys = zipWith (+) xs ys == addpairs xs ys
+
 prop_ones :: Int -> Bool
 prop_ones n
   | n < 0 = prop_ones ((-1) * n)
@@ -65,3 +68,6 @@ prop_inclist' xs = [ (x + 1) | x <- xs ] == (inclist' xs)
 
 prop_sumlist' :: [Int] -> Bool
 prop_sumlist' xs = sumlist' xs == List.sum xs
+
+prop_listcons :: [Int] -> Bool
+prop_listcons xs = xs == cons2list (list2cons xs)
