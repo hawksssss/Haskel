@@ -1,4 +1,4 @@
-import Mp1Solution
+import Mp1
 import Test.QuickCheck
 import Control.Monad
 import qualified Data.List as List
@@ -62,7 +62,8 @@ prop_fib n
   | n < 0 = prop_fib ((-1) * n)
   | n == 0 = [] == take n fib
   | n == 1 = [1] == take n fib
-  | otherwise = sum (map toInteger (take 2 (rev (map fromInteger (take (n-1) fib))))) == head (drop (n-1) fib)
+  | n == 2 = [1, 1] == take n fib
+  | otherwise = sum (take 2 (drop (n-3) fib)) == head (drop (n-1) fib)
 
 prop_inclist' :: [Int] -> Bool
 prop_inclist' xs = [ (x + 1) | x <- xs ] == (inclist' xs)
