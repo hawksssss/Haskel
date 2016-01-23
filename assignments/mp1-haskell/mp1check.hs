@@ -18,7 +18,7 @@ prop_app :: Int -> [Int] -> Bool
 prop_app n xs = (app (take (length xs `div` 3) xs) (drop (length xs `div` 3) xs)) == xs
 
 prop_add :: (Ord a) => a -> [a] -> Bool
-prop_add n ys = (List.insert n ys) == (add n ys)
+prop_add n ys = List.nub (List.insert n ys) == (add n ys)
 
 prop_union :: (Ord a) => [a] -> [a] -> Bool
 prop_union xs ys = (List.union xs' ys') == (union xs' ys')
