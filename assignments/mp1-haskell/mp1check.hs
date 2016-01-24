@@ -1,4 +1,4 @@
-import Mp1Solution
+import Mp1
 import Test.QuickCheck
 import Control.Monad
 import qualified Data.List as List
@@ -19,21 +19,22 @@ prop_app n xs = (app (take (length xs `div` 3) xs) (drop (length xs `div` 3) xs)
 
 prop_add :: (Ord a) => a -> [a] -> Bool
 prop_add n ys = List.nub (List.insert n ys') == (add n ys')
-  where ys' = List.nub ys
+  where ys' = List.nub (List.sort ys)
 
 prop_union :: (Ord a) => [a] -> [a] -> Bool
-prop_union xs ys = (List.union xs' ys') == (union xs' ys')
-  where xs' = List.nub xs
-        ys' = List.nub ys
+prop_union xs ys = List.sort (List.union xs' ys') == (union xs' ys')
+  where xs' = List.nub (List.sort xs)
+        ys' = List.nub (List.sort ys)
 
 prop_intersect :: (Ord a) => [a] -> [a] -> Bool
 prop_intersect xs ys = (List.intersect xs' ys') == (intersect xs' ys')
-  where xs' = List.nub xs
-        ys' = List.nub ys
+  where xs' = List.nub (List.sort xs)
+        ys' = List.nub (List.sort ys)
 
 prop_powerset :: [Int] -> Bool
-prop_powerset xs = (2^(length xs')) == length (powerset xs')
-  where xs' = take 10 (List.nub xs)
+prop_powerset xs = (2^(length xs')) == length ps && (List.sort ps == ps)
+  where xs' = take 10 (List.nub (List.sort (xs)))
+        ps  = powerset xs'
 
 prop_inclist :: [Int] -> Bool
 prop_inclist xs = [ (x + 1) | x <- xs ] == (inclist xs)
@@ -62,7 +63,8 @@ prop_fib n
   | n < 0 = prop_fib ((-1) * n)
   | n == 0 = [] == take n fib
   | n == 1 = [1] == take n fib
-  | otherwise = sum (map toInteger (take 2 (rev (map fromInteger (take (n-1) fib))))) == head (drop (n-1) fib)
+  | n == 2 = [1, 1] == take n fib
+  | otherwise = sum (take 2 (drop (n-3) fib)) == head (drop (n-1) fib)
 
 prop_inclist' :: [Int] -> Bool
 prop_inclist' xs = [ (x + 1) | x <- xs ] == (inclist' xs)
