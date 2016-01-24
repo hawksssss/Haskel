@@ -24,50 +24,67 @@ data Exp = IntExp Int
  -   > quickCheck prop_mytake
  -}
 
--- mytake :: your type signature here
-mytake = undefined
+mytake :: Int -> [Int] -> [Int]
+mytake 0 xx = []
+mytake n [] = []
+mytake n (x:xs) = x:(mytake (n-1) xs)
 
--- mydrop :: your type signature here
-mydrop = undefined
+mydrop :: Int -> [Int] -> [Int]
+mydrop 0 xx = xx
+mydrop n [] = []
+mydrop n (x:xs) = mydrop (n-1) xs
 
--- rev :: your type signature here
-rev = undefined
+rev :: [Int] -> [Int]
+rev xx = aux xx [] where
+    aux [] aa = aa
+    aux (x:xs) aa = aux xs (x:aa)
 
--- app :: your type signature here
-app = undefined
+app :: [Int] -> [Int] -> [Int]
+app xx [] = xx
+app xx (y:ys) = app (xx ++ [y]) ys 
 
--- add :: your type signature here
-add = undefined
+add :: Ord a => a -> [a] -> [a]
+add x [] = [x]
+add x xx = [y| y<- xx, y<x] ++ [x] ++ [y| y<- xx, y>x]
 
--- union :: your type signature here
-union = undefined
+union :: Ord a => [a] -> [a] -> [a]
+union [] yy = yy
+union (x:xs) yy = union xs (add x yy)
 
--- intersect :: your type signature here
-intersect = undefined
+intersect :: Ord a => [a] -> [a] -> [a]
+intersect [] yy = []
+intersect (x:xs) yy = [y | y<-yy, y==x] ++ intersect xs yy
 
--- powerset :: your type signature here
-powerset = undefined
+powerset :: Ord a => [a] -> [[a]]
+powerset [] = [[]]
+powerset (x:xs) = [[]] ++ [x:xx | xx<- (powerset xs)] ++ [xx | xx<- (powerset xs),xx/=[]]
 
--- inclist :: your type signature here
-inclist = undefined
+inclist :: (Num a) => [a] -> [a]
+inclist [] = []
+inclist (x:xs) = x+1:inclist xs
 
--- sumlist :: your type signature here
-sumlist = undefined
+sumlist :: (Num t) => [t] -> t
+sumlist [] = 0
+sumlist (x:xs) = x + sumlist xs
 
--- myzip :: your type signature here
-myzip = undefined
+myzip :: [t] -> [t1] -> [(t, t1)]
+myzip [] xx = []
+myzip xx [] = []
+myzip (x:xs) (y:ys) = (x,y):myzip xs ys
 
--- addpairs :: your type signature here
-addpairs = undefined
+addpairs :: (Num a) => [a] -> [a] -> [a]
+addpairs [] xx = []
+addpairs xx [] = []
+addpairs (x:xs) (y:ys) = (x+y):addpairs xs ys
 
--- ones :: your type signature here
-ones = undefined
+ones :: [Integer]
+ones = 1:ones
 
--- nats :: your type signature here
-nats = undefined
+nats :: [Integer]
+nats = 1 : (inclist nats)
 
--- fib :: your type signature here
-fib = undefined
+fib :: [Integer]
+fib = 1 : (addpairs fib (0:fib))
 
 -- list2cons :: your type signature here
 list2cons = undefined
