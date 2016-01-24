@@ -33,7 +33,7 @@ prop_intersect xs ys = (List.intersect xs' ys') == (intersect xs' ys')
 
 prop_powerset :: [Int] -> Bool
 prop_powerset xs = (2^(length xs')) == length ps && (List.sort ps == ps)
-  where xs' = take 10 (List.nub List.sort (xs))
+  where xs' = take 10 (List.nub (List.sort (xs)))
         ps  = powerset xs'
 
 prop_inclist :: [Int] -> Bool
