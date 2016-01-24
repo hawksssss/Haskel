@@ -22,7 +22,7 @@ prop_add n ys = List.nub (List.insert n ys') == (add n ys')
   where ys' = List.nub ys
 
 prop_union :: (Ord a) => [a] -> [a] -> Bool
-prop_union xs ys = (List.union xs' ys') == (union xs' ys')
+prop_union xs ys = List.sort (List.union xs' ys') == (union xs' ys')
   where xs' = List.nub xs
         ys' = List.nub ys
 
