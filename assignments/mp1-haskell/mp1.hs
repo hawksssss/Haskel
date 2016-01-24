@@ -13,7 +13,7 @@ data Exp = IntExp Int
  - You'll want to go through and put in the type signatures first, if you want
  - to check your work incrementally with quickCheck. (quickCheck is a way to
  - create random tests to validate your work.)
- -
+ -aa
  - To use our quickChecks, you'll want to load up mp1check by going:
  -   :l mp1check
  -
@@ -21,7 +21,7 @@ data Exp = IntExp Int
  -   > quickCheck PROP_NAME
  -
  - For example, to test mytake, you would run:
- -   > quickCheck prop_mytake
+ -   > quickCheck prop_mytake 
  -}
 
 mytake :: Int -> [Int] -> [Int]
