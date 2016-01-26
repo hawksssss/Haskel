@@ -25,12 +25,14 @@ data Exp = IntExp Int
  -}
 
 mytake :: Int -> [Int] -> [Int]
-mytake 0 xx = []
+mytake n xx 
+        | n<=0 = []
 mytake n [] = []
 mytake n (x:xs) = x:(mytake (n-1) xs)
 
 mydrop :: Int -> [Int] -> [Int]
-mydrop 0 xx = xx
+mydrop n xx 
+       | n<=0 = xx
 mydrop n [] = []
 mydrop n (x:xs) = mydrop (n-1) xs
 
@@ -86,20 +88,24 @@ nats = 1 : (inclist nats)
 fib :: [Integer]
 fib = 1 : (addpairs fib (0:fib))
 
--- list2cons :: your type signature here
-list2cons = undefined
+list2cons :: [a] -> Cons a
+list2cons [] = Nil
+list2cons (x:xs) = Cons x (list2cons xs)
 
--- cons2list :: your type signature here
-cons2list = undefined
+cons2list :: Cons a -> [a]
+cons2list Nil = []
+cons2list (Cons x xs) =x : cons2list xs
 
--- eval :: your type signature here
-eval = undefined
+eval :: Exp -> Int
+eval (IntExp a) = a
+eval (PlusExp [a, b]) = (+) (eval a) (eval b)
+eval (MultExp [a, b]) = (*) (eval a) (eval b)
 
--- inclist' :: your type signature here
-inclist' = undefined
+inclist' :: (Num a) => [a] -> [a]
+inclist' xx = map (+1) xx
 
--- sumlist' :: your type signature here
-sumlist' = undefined
+sumlist' :: (Num a) => [a] -> a
+sumlist' xx = foldr (+) 0 xx
 
--- list2cons' :: your type signature here
-list2cons' = undefined
+list2cons' :: [a] -> Cons a
+list2cons' xx = foldr Cons Nil xx
