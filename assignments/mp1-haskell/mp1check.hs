@@ -1,7 +1,6 @@
 import Mp1
 import Test.QuickCheck
 import Test.QuickCheck.All
-import TemplateHaskell
 import qualified Data.List as List
 
 {-------- QUICKCHECKS --------}
