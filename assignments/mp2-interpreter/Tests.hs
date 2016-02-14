@@ -1,6 +1,6 @@
 {-----------------------------------
  - Tests.hs
- - v1.0
+ - v1.0.1
  -----------------------------------}
 
 module Tests where
@@ -22,7 +22,7 @@ tests = [
           ("if true then print 1; else print 0; fi;", "1"),
 
           -- assignment
-          ("if true then do x := 1; print x; od; else do x := 0; print x; od; fi;", "0"),
+          ("if true then do x := 1; print x; od; else do x := 0; print x; od; fi;", "1"),
 
           -- integer operations
           ("print 1+2;", "3"),
