@@ -19,7 +19,7 @@ liftBoolOp op (BoolVal x) (BoolVal y) = BoolVal $ op x y
 liftBool _ _ _ = ExnVal "Cannot lift"
 
 liftCompOp :: (Int -> Int -> Bool) -> Val -> Val -> Val
-liftCompOp = fixMe
+liftCompOp op (IntVal x) (IntVal y) = BoolVal $ op x y
 liftCompOp _ _ _ = ExnVal "Cannot lift"
 
 {-----------------------------------
