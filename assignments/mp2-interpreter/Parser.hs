@@ -1,6 +1,6 @@
 {-----------------------------------
  - Parser.hs
- - v1.0
+ - v1.1
  -----------------------------------}
 
 {-# LANGUAGE NoMonomorphismRestriction #-}
@@ -41,9 +41,9 @@ data Val = IntVal Int
 instance Show Val where
    show (IntVal i) = show i
    show (BoolVal i) = show i
-   show (CloVal f penv env) = "<" ++ show f ++ ", "
-                                  ++ show penv ++ ", "
-                                  ++ show env ++ ">"
+   show (CloVal xs body env) = "<" ++ show xs ++ ", "
+                                   ++ show body ++ ", "
+                                   ++ show env ++ ">"
    show (ExnVal s) = "\nexn: " ++ s
 
 -- Type for the symbol dictionary
