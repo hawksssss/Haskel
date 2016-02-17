@@ -56,18 +56,14 @@ eval (LetExp ((s,e1):xs) e2) env =
 
 eval (FunExp xx e1) env = CloVal xx e1 env      
 
--- if number of input is smaller than all input, then return CloVal; otherwise return eval Exp Env 
-            
-eval (AppExp e1 []) env = eval e1 env
-                       
-eval (AppExp e1 (x:xs)) env = 
-        let CloVal v e3 cenv = eval e1 env
-            arg = eval x env
-        in case v of 
-            [ther] -> eval e3 (insert v arg cenv)
-            (y:ys) -> AppExp e3 (x:xs)
-            CloVal ys e3 (insert x arg cenv)
-      
+-- if number of input is smaller than all input, then return CloVal; otherwise return eval Exp Env                             
+eval (AppExp e1 xx) env =
+        let CloVal v e3 cenv = eval e1 env  -- e1 can be FunExp, VarExp, etc!!
+            arg = Prelude.map (flip eval env) xx
+        in case (compare (length v) (length xx)) of 
+            GT -> CloVal (drop (length xx) v) e3 (union (fromList(zip (take (length xx) v) arg)) cenv)
+            EQ -> eval e3 (union (fromList(zip v arg)) cenv)
+
 {-----------------------------------
  - exec
  -----------------------------------}
@@ -85,12 +81,18 @@ exec (IfStmt a s1 s2) penv env =            -- Notice: exp a instead of BoolOpEx
                          BoolVal True -> exec s1 penv env
                          BoolVal False -> exec s2 penv env
                     
-
-
 exec (SetStmt s e) penv env = ("",penv,insert s (eval e env) env)
 
+exec (ProcedureStmt f xx body) penv env = ("",insert f (ProcedureStmt f xx body) penv,env)
 
-
+exec (CallStmt name arg) penv env
+     case (H.lookup name penv) of
+           Just (ProcedureStmt f xx body) -> v
+           Nothing -> ExnVal "No match in env"
+        
+        
+        
+        
 {-----------------------------------
  - repl
  -----------------------------------}
