@@ -58,26 +58,15 @@ eval (FunExp xx e1) env = CloVal xx e1 env
 
 -- if number of input is smaller than all input, then return CloVal; otherwise return eval Exp Env 
             
--- eval (AppExp e1 []) env
-        -- let CloVal v e3 cenv = eval e1 env
-        -- in case v of 
-            -- [ther] -> eval e3 cenv
-            -- (x:xs) -> CloVal xs e3 cenv
-            
--- eval (AppExp e1 [e2]) env =
-        -- let CloVal v e3 cenv = eval e1 env
-            -- arg = eval e2 env
-        -- in case v of 
-            -- [ther] -> eval e3 (insert ther arg cenv)
-            -- (x:xs) -> CloVal xs e3 (insert x arg cenv)
-            
-            
--- eval (AppExp e1 (x:xs)) env = 
-        -- let CloVal v e3 cenv = eval e1 env
-            -- arg = eval x env
-        -- in case v of 
-            -- [ther] -> eval e3 (insert v arg cenv)
-            -- (x:xs) -> CloVal xs e3 (insert x arg cenv)
+eval (AppExp e1 []) env = eval e1 env
+                       
+eval (AppExp e1 (x:xs)) env = 
+        let CloVal v e3 cenv = eval e1 env
+            arg = eval x env
+        in case v of 
+            [ther] -> eval e3 (insert v arg cenv)
+            (y:ys) -> AppExp e3 (x:xs)
+            CloVal ys e3 (insert x arg cenv)
       
 {-----------------------------------
  - exec
