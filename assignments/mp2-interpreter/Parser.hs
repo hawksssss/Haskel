@@ -1,6 +1,6 @@
 {-----------------------------------
  - Parser.hs
- - v1.1
+ - v1.2
  -----------------------------------}
 
 {-# LANGUAGE NoMonomorphismRestriction #-}
@@ -117,12 +117,12 @@ andOp = do try $ symbol "and"
 orOp = do try $ symbol "or"
           return $ BoolOpExp "or"
 
-compOp =   do { symbol "<" ; return $ CompOpExp "<" }
-       <|> do { symbol ">" ; return $ CompOpExp ">" }
-       <|> do { symbol "<=" ; return $ CompOpExp "<=" }
-       <|> do { symbol ">=" ; return $ CompOpExp ">=" }
-       <|> do { symbol "/=" ; return $ CompOpExp "/=" }
-       <|> do { symbol "==" ; return $ CompOpExp "==" }
+compOp =   do try $ do { symbol "<=" ; return $ CompOpExp "<=" }
+       <|> do try $ do { symbol ">=" ; return $ CompOpExp ">=" }
+       <|> do try $ do { symbol "/=" ; return $ CompOpExp "/=" }
+       <|> do try $ do { symbol "==" ; return $ CompOpExp "==" }
+       <|> do try $ do { symbol "<" ; return $ CompOpExp "<" }
+       <|> do try $ do { symbol ">" ; return $ CompOpExp ">" }
 
 ifExp = do try $ symbol "if"
            e1 <- expr
