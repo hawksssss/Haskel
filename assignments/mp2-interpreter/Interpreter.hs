@@ -56,14 +56,20 @@ eval (LetExp ((s,e1):xs) e2) env =
 
 eval (FunExp xx e1) env = CloVal xx e1 env      
 
--- if number of input is smaller than all input, then return CloVal; otherwise return eval Exp Env                             
 eval (AppExp e1 xx) env =
-        let CloVal v e3 cenv = eval e1 env  -- e1 can be FunExp, VarExp, etc!! Create pattern match exception
-            arg = Prelude.map (flip eval env) xx
-        in case (compare (length v) (length xx)) of 
-            GT -> CloVal (drop (length xx) v) e3 (union (fromList(zip (take (length xx) v) arg)) cenv)
-            EQ -> eval e3 (union (fromList(zip v arg)) cenv)
+    case (eval e1 env) of  -- e1 can be FunExp, VarExp, etc!! Create pattern match exception
+        CloVal v e3 cenv ->
+            let arg = Prelude.map (flip eval env) xx  
+            in case (compare (length v) (length xx)) of 
+                GT -> CloVal (drop (length xx) v) e3 (union (fromList(zip (take (length xx) v) arg)) cenv)
+                EQ -> eval e3 (union (fromList(zip v arg)) cenv)
+        _ -> ExnVal "Expression not a closure."
 
+eval (IfExp e1 e2 e3) env =
+        case (eval e1 env) of 
+            BoolVal True -> eval e2 env
+            BoolVal False -> eval e3 env
+            _ -> ExnVal "Guard is not a boolean."
 {-----------------------------------
  - exec
  -----------------------------------}
@@ -86,10 +92,12 @@ exec (SetStmt s e) penv env = ("",penv,insert s (eval e env) env)
 
 exec (ProcedureStmt f ps body) penv env = ("",insert f (ProcedureStmt f ps body) penv,env)
 
-exec (CallStmt name arg) penv env
+exec (CallStmt name arg) penv env =
      case (H.lookup name penv) of
-           Just (ProcedureStmt f ps body) -> v
-           Nothing -> ("Procedure f undefined",penv,env)
+          (Just (ProcedureStmt f ps body)) -> 
+                let val = Prelude.map (flip eval env) arg
+                in exec body penv (union (fromList(zip ps val)) env)
+          Nothing -> ("Procedure f undefined",penv,env)
         
         
         
