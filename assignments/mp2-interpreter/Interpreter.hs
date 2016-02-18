@@ -58,7 +58,7 @@ eval (FunExp xx e1) env = CloVal xx e1 env
 
 -- if number of input is smaller than all input, then return CloVal; otherwise return eval Exp Env                             
 eval (AppExp e1 xx) env =
-        let CloVal v e3 cenv = eval e1 env  -- e1 can be FunExp, VarExp, etc!!
+        let CloVal v e3 cenv = eval e1 env  -- e1 can be FunExp, VarExp, etc!! Create pattern match exception
             arg = Prelude.map (flip eval env) xx
         in case (compare (length v) (length xx)) of 
             GT -> CloVal (drop (length xx) v) e3 (union (fromList(zip (take (length xx) v) arg)) cenv)
@@ -77,18 +77,19 @@ exec (SeqStmt (x:xs)) penv env = (s1++s2,penv',env')
          (s2,penv',env') = exec (SeqStmt xs) penv'' env''
 
 exec (IfStmt a s1 s2) penv env =            -- Notice: exp a instead of BoolOpExp! Could be other expressions!!
-                    case eval a env of 
+                    case (eval a env) of 
                          BoolVal True -> exec s1 penv env
                          BoolVal False -> exec s2 penv env
-                    
+                         _ -> ("Guard is not a boolean.", penv, env)
+                         
 exec (SetStmt s e) penv env = ("",penv,insert s (eval e env) env)
 
-exec (ProcedureStmt f xx body) penv env = ("",insert f (ProcedureStmt f xx body) penv,env)
+exec (ProcedureStmt f ps body) penv env = ("",insert f (ProcedureStmt f ps body) penv,env)
 
 exec (CallStmt name arg) penv env
      case (H.lookup name penv) of
-           Just (ProcedureStmt f xx body) -> v
-           Nothing -> ExnVal "No match in env"
+           Just (ProcedureStmt f ps body) -> v
+           Nothing -> ("Procedure f undefined",penv,env)
         
         
         
