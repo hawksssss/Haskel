@@ -1,6 +1,6 @@
 {-----------------------------------
  - Parser.hs
- - v1.2
+ - v1.3
  -----------------------------------}
 
 {-# LANGUAGE NoMonomorphismRestriction #-}
@@ -65,7 +65,7 @@ compOps = H.fromList [ ("<", (<))
                      , (">", (>))
                      , ("<=", (<=))
                      , (">=", (>=))
-                     , ("/=", (/=))
+                     , ("!=", (/=))
                      , ("==", (==)) ]
 
 -- Parser, given for you this time.
@@ -105,8 +105,8 @@ boolExp = do { symbol "true" ; return $ BoolExp True }
 varExp = do v <- var
             return $ VarExp v
 
-mulOp =    do { symbol "*" ; return $ IntOpExp "*" }
-       <|> do { symbol "/" ; return $ IntOpExp "/" }
+mulOp =    do try $ do { symbol "*" ; return $ IntOpExp "*" }
+       <|> do try $ do { symbol "/" ; return $ IntOpExp "/" }
 
 addOp =    do { symbol "+" ; return $ IntOpExp "+" }
        <|> do { symbol "-" ; return $ IntOpExp "-" }
@@ -119,7 +119,7 @@ orOp = do try $ symbol "or"
 
 compOp =   do try $ do { symbol "<=" ; return $ CompOpExp "<=" }
        <|> do try $ do { symbol ">=" ; return $ CompOpExp ">=" }
-       <|> do try $ do { symbol "/=" ; return $ CompOpExp "/=" }
+       <|> do try $ do { symbol "!=" ; return $ CompOpExp "!=" }
        <|> do try $ do { symbol "==" ; return $ CompOpExp "==" }
        <|> do try $ do { symbol "<" ; return $ CompOpExp "<" }
        <|> do try $ do { symbol ">" ; return $ CompOpExp ">" }
@@ -161,11 +161,11 @@ appExp = do try $ symbol "apply"
             symbol ")"
             return $ AppExp efn exps
 
-expr = disj `chainl1` orOp
-disj = conj `chainl1` andOp
-conj = arith `chainl1` compOp
-arith = term `chainl1` addOp
-term = factor `chainl1` mulOp
+expr = disj `chainl1` try(orOp)
+disj = conj `chainl1` try(andOp)
+conj = arith `chainl1` try(compOp)
+arith = term `chainl1` try(addOp)
+term = factor `chainl1` try(mulOp)
 factor = atom
 
 atom = intExp
