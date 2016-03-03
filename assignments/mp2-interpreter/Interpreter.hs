@@ -57,7 +57,7 @@ eval (LetExp ((s,e1):xs) e2) env =
 eval (FunExp xx e1) env = CloVal xx e1 env      
 
 eval (AppExp e1 xx) env =
-    case (eval e1 env) of  -- e1 can be FunExp, VarExp, etc!! Create pattern match exception
+    case (eval e1 env) of  -- e1 can be FunExp, VarExp, etc! Create pattern match exception
         CloVal v e3 cenv ->
             let arg = Prelude.map (flip eval env) xx  
             in case (compare (length v) (length xx)) of 
