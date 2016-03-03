@@ -1,19 +1,24 @@
 Grade Report for Shan Zhao
-Produced 2016-02-20 17:14
+Produced 2016-03-03 15:09
 Netid: szhao28 uin: 678895860
 Course: cs421 (2016-01)  Section: B3  CRN: 31375
 
                      Assignment  Status Raw Max    Norm Weight  Points 
 ------------------------------- ------- --- --- ------- ------ ------- 
-                  MP1 - Haskell  Graded 116 126  92.06% 0.1000  9.2063 
-          HW1 - Lambda Calculus  Graded  49  60  81.67% 0.0500  4.0833 
+                  MP1 - Haskell  Graded 116 126  92.06% 0.0750  6.9048 
+          HW1 - Lambda Calculus  Graded  49  60  81.67% 0.0750  6.1250 
               MP2 - Interpreter Pending n/a 100     n/a 0.0000  0.0000 
-          Pre Course Assessment  Graded   1   1 100.00% 0.0200  2.0000 
-             Recursion Activity  Graded   1   1 100.00% 0.0200  2.0000 
-Higher Order Functions Activity  Graded   1   1 100.00% 0.0200  2.0000 
-  Algebraic Data Types Activity  Graded 100 100 100.00% 0.0200  2.0000 
-       Lambda Calculus Activity  Graded 100 100 100.00% 0.0200  2.0000 
-          Type Classes Activity Pending n/a 100     n/a 0.0000  0.0000 
-                 Monad Activity Pending n/a 100     n/a 0.0000  0.0000 
+                  ML1 - Haskell Pending n/a 100     n/a 0.0000  0.0000 
+                      MP3 - CPS Pending n/a 100     n/a 0.0000  0.0000 
+                      ML2 - CPS Pending n/a 100     n/a 0.0000  0.0000 
+          Pre Course Assessment  Graded   1   1 100.00% 0.0125  1.2500 
+             Recursion Activity  Graded   1   1 100.00% 0.0125  1.2500 
+Higher Order Functions Activity  Graded   1   1 100.00% 0.0125  1.2500 
+  Algebraic Data Types Activity  Graded 100 100 100.00% 0.0125  1.2500 
+       Lambda Calculus Activity  Graded 100 100 100.00% 0.0125  1.2500 
+          Type Classes Activity  Graded 100 100 100.00% 0.0125  1.2500 
+                 Monad Activity  Graded 100 100 100.00% 0.0125  1.2500 
+               Grammar Activity  Graded   1   1 100.00% 0.0125  1.2500 
+            LL Parsing Activity Pending n/a   1     n/a 0.0000  0.0000 
 ------------------------------- ------- --- --- ------- ------ ------- 
-                          Total                  93.16% 0.2500 23.2897 
+                          Total                  92.12% 0.2500 23.0298 
