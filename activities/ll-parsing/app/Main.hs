@@ -40,3 +40,15 @@ parseE ("+":xs) =
 
 parseE (x:xs) | isInt x =
                 (IntExp (read x), xs)
+
+parseE ("let":x:xs) = 
+  let v = x
+      (_,r1) = parseSymbol "=" xs
+      (e1,r2) = parseE r1
+      (_,r3) = parseSymbol "in" r2
+      (e2,r4) = parseE r3
+      (_,r5) = parseSymbol "end" r4
+  in (LetExp v e1 e2, r5)
+
+parseE (x:xs) = (VarExp x, xs)
+
