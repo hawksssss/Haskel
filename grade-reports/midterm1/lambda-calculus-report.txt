@@ -1,0 +1,15 @@
+Last Updated: Tue, 01 Mar 2016 10:05:05
+
+================================
+= Point Breakdown
+================================
+
+8.0 of 8.0 points (with 0.0 guessing penalty) for: 	tf-lambdaCalculus-alphaBeta-lc04
+
+Total Score: 8.0 of 8.0 points
+
+================================
+= Your Answers
+================================
+
+Your answer for tf-lambdaCalculus-alphaBeta-lc04 was:     	['T', 'F', 'T', 'F', 'T', 'F', 'T', 'T']

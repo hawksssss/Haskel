@@ -1,0 +1,19 @@
+=============================================================
+= Midterm 1 Grade Report for szhao28
+=============================================================
+
+
+=============================================================
+= Per-Question Breakdown
+=============================================================
+= code-hs-adtListTrees-sumLeaves_pruneTree          20 points
+= code-hs-basicHaskellGuards-makeOdd                10 points
+= code-hs-basicHaskellPatterns-myfst                10 points
+= code-hs-hofUse-allOdd                             10 points
+= code-hs-hofWrite-map                              10 points
+= code-hs-recursionList-dotProduct                  10 points
+= code-hs-recursionTail-posList                     10 points
+= tf-lambdaCalculus-alphaBeta-lc04                   8 points
+=============================================================
+= Final Grade:                                   88/88 points
+=============================================================
