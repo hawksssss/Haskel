@@ -6,19 +6,8 @@ import Test.QuickCheck
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Modifiers
+import Tests
 import qualified Continuation as C
-
-factTests' = [
-              10
-            ]
-
-evenoddTests' = [
-                 [1]
-               , [1,2]
-               ]
-
-isSimpleTests = [
-                ]
 
 main = do {
           ; putStrLn ""
