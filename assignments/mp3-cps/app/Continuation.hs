@@ -59,7 +59,7 @@ isSimple (IfExp e1 e2 e3) = isSimple e1 && (isSimple e2) && (isSimple e3)
 cpsDecl :: Stmt -> Stmt
 
 cpsDecl (Decl s1 xx e) = Decl s1 (xx++["k"]) e1
-          where (e1,_) = cpsExp e (VarExp "k") 0
+          where (e1,_) = cpsExp e (VarExp "k") 1
 
 cpsExp :: Exp -> Exp -> Integer -> (Exp,Integer)
 cpsExp (IntExp i) k j = (AppExp k (IntExp i), j)
@@ -84,6 +84,7 @@ cpsExp (OpExp s e1 e2) k j
                  where (v,_) = gensym j
                        (e3,l) = cpsExp e2 (LamExp v1 (AppExp k (OpExp s (VarExp v) (VarExp v1)))) (j + 2)
                        (v1,_) = gensym (j + 1)
+                       
 {--------------------------------------
  - Helper Functions
  --------------------------------------}
