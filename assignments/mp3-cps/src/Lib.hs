@@ -7,7 +7,7 @@ import Data.List
 import Text.ParserCombinators.Parsec
 
 data Stmt = Decl String [String] Exp
-    deriving Show
+    deriving (Show,Eq)
 
 class ToStr a where
   toStr :: a -> String
@@ -21,7 +21,7 @@ data Exp = IfExp Exp Exp Exp
          | IntExp Integer
          | VarExp String
          | LamExp String Exp
-    deriving Show
+    deriving (Show,Eq)
 
 instance ToStr Exp where
   toStr (VarExp s) = s
