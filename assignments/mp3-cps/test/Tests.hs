@@ -1,4 +1,5 @@
 module Tests where
+import Lib
 
 factTests' = [
               10
@@ -11,3 +12,7 @@ evenoddTests' = [
 
 isSimpleTests = [
                 ]
+
+studentCpsDeclTests = [
+                 ("foo v = v", Decl "fook" ["v","k"] (AppExp (VarExp "k") (VarExp "v")))
+               ] :: [(String, Stmt)]

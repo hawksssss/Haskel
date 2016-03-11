@@ -14,9 +14,38 @@ main = do {
           ; testProp (prop_factk, "factk", factTests)
           ; testProp (prop_evenoddk, "evenoddk", evenoddTests)
           ; testProp (prop_isSimple, "isSimple", isSimpleTests)
+          ; testCases (evalStmt, "Given Cases", cpsDeclTests)
+          ; testCases (evalStmt, "Student Written Cases", studentCpsDeclTests)
           }
 
 {- DO NOT MODIFY BELOW THIS LINE! -}
+
+cpsDeclTests = [
+                -- The Basics
+                ("foo v = v", Decl "fook" ["v","k"] (AppExp (VarExp "k") (VarExp "v"))),
+                ("foo v = 5", Decl "fook" ["v","k"] (AppExp (VarExp "k") (IntExp 5))),
+
+                -- Application
+                ("foo f x = f x", Decl "fook" ["f","x","k"] (AppExp (AppExp (VarExp "f") (VarExp "x")) (VarExp "k"))),
+                -- If Expressions
+                ("foo f x = if x then 1 else 0", Decl "fook" ["f","x","k"] (IfExp (VarExp "x") (AppExp (VarExp "k") (IntExp 1)) (AppExp (VarExp "k") (IntExp 0)))),
+                ("foo f x = if f x then 1 else 0", Decl "fook" ["f","x","k"] (AppExp (AppExp (VarExp "f") (VarExp "x")) (LamExp "v1" (IfExp (VarExp "v1") (AppExp (VarExp "k") (IntExp 1)) (AppExp (VarExp "k") (IntExp 0)))))),
+
+                -- Operator Expressions
+                ("foo x y = x + y", Decl "fook" ["x","y","k"] (OpExp "+" (VarExp "x") (VarExp "y"))),
+                ("foo f x y = f x + y", Decl "fook" ["f","x","y","k"] (AppExp (AppExp (VarExp "f") (VarExp "x")) (LamExp "v1" (AppExp (VarExp "k") (OpExp "+" (VarExp "v1") (VarExp "y")))))),
+                ("foo f x y = x + f y", Decl "fook" ["f","x","y","k"] (AppExp (AppExp (VarExp "f") (VarExp "y")) (LamExp "v1" (AppExp (VarExp "k") (OpExp "+" (VarExp "x") (VarExp "v1")))))),
+                ("foo f g x y = f x + g y", Decl "fook" ["f","g","x","y","k"] (AppExp (AppExp (VarExp "f") (VarExp "x")) (LamExp "v1" (AppExp (AppExp (VarExp "g") (VarExp "y")) (LamExp "v2" (AppExp (VarExp "k") (OpExp "+" (VarExp "v1") (VarExp "v2")))))))),
+
+                -- Potpourri
+                ("foo x = if x > 5 then 1 else 0", Decl "fook" ["x","k"] (IfExp (OpExp ">" (VarExp "x") (IntExp 5)) (AppExp (VarExp "k") (IntExp 1)) (AppExp (VarExp "k") (IntExp 0)))),
+                ("foo f x = if f x > 5 then 1 else 0", Decl "fook" ["f","x","k"] (AppExp (OpExp ">" (AppExp (VarExp "f") (VarExp "x")) (IntExp 5)) (LamExp "v1" (IfExp (VarExp "v1") (AppExp (VarExp "k") (IntExp 1)) (AppExp (VarExp "k") (IntExp 0)))))),
+                ("ifapp f g h = (if (g > h) then f (g + 5) else f (h + 5))", Decl "ifappk" ["f","g","h","k"] (IfExp (OpExp ">" (VarExp "g") (VarExp "h")) (AppExp (AppExp (VarExp "f") (OpExp "+" (VarExp "g") (IntExp 5))) (VarExp "k")) (AppExp (AppExp (VarExp "f") (OpExp "+" (VarExp "h") (IntExp 5))) (VarExp "k"))))
+               ]
+
+evalStmt input = case parseDecl input of
+    Right x -> C.cpsDecl x
+    Left x -> error "fail"
 
 instance Arbitrary Stmt where
   arbitrary = sized stmt'
@@ -26,7 +55,13 @@ stmt' n = (liftM3 Decl fname params expr)
              paramList = take (mod n 26) (map (\x -> [x]) ['a' .. 'z'])
              fname = listOf1 (elements ['a' .. 'z'])
              expr = exp' paramList
-             params = (sublistOf paramList)
+             params = (liftM gatherVars expr)
+
+gatherVars (VarExp x) = [x]
+gatherVars (AppExp e1 e2) = gatherVars e1 ++ gatherVars e2
+gatherVars (IfExp e1 e2 e3) = gatherVars e1 ++ gatherVars e2 ++ gatherVars e3
+gatherVars (OpExp _ e1 e2) = gatherVars e1 ++ gatherVars e2
+gatherVars _ = []
 
 instance Arbitrary Exp where
   arbitrary = exp' alphastring

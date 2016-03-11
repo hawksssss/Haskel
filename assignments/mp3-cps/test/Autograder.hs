@@ -21,3 +21,15 @@ testProp (prop, propName, tests) = do {
                                               })
                                        else putStrLn ("Passed QuickChecks for " ++ propName ++ ".")
                                       }
+
+testCases (function, propName, tests) = do {
+                                          ; putStrLn ("Running tests for " ++ propName ++ ".")
+                                          ; mapM_ putStrLn (map (\(test, result) ->
+                                              if (function test /= result)
+                                              then do { ("\tFailed Test: " ++ (show test))
+                                                      }
+                                              else ("\tPassed Test: " ++ (show test))
+                                            ) tests)
+                                        }
+
+
