@@ -16,6 +16,17 @@ main = do {
           ; testProp (prop_isSimple, "isSimple", isSimpleTests)
           ; testCases (evalStmt, "Given Cases", cpsDeclTests)
           ; testCases (evalStmt, "Student Written Cases", studentCpsDeclTests)
+          ; xs <- (sample' (stmt' 100))
+          ; putStrLn "\nAnd some test cases for you..."
+          ; results <- mapM (\x -> do { putStr "Test: "
+                                      ; print x
+                                      ; putStr "\t"
+                                      ; print (C.cpsDecl x)
+                                      ; putStr "\n"
+                                      })
+                            xs
+          ; putStrLn ""
+          ; putStrLn "And some test cases for you..."
           }
 
 {- DO NOT MODIFY BELOW THIS LINE! -}
@@ -49,12 +60,11 @@ evalStmt input = case parseDecl input of
 instance Arbitrary Stmt where
   arbitrary = sized stmt'
 
-stmt' n = (liftM3 Decl fname params expr)
-  where
-    fname = listOf1 (elements ['a' .. 'z'])
-    paramList = take (mod n 26) (map (\x -> [x]) ['a' .. 'z'])
-    expr = exp' paramList
-    params = (liftM gatherVars) expr
+stmt' n = do { expr'' <- (exp' [[x] | x <- (['a' .. 'j'] ++ ['l' .. 'z'])])
+             ; params <- shuffle (gatherVars expr'')
+             ; fname <- listOf1 (elements (['a' .. 'j'] ++ ['l' .. 'z']))
+             ; return (Decl fname params expr'')
+             }
 
 gatherVars (VarExp x) = [x]
 gatherVars (AppExp e1 e2) = gatherVars e1 ++ gatherVars e2
@@ -80,8 +90,8 @@ exp' alphastring = frequency [
          (10, liftM IntExp arbitrary),
          (1, liftM2 AppExp sub sub),
          (5, liftM3 IfExp sub sub sub),
-         (5, liftM3 OpExp op sub sub),
-         (1, liftM2 LamExp (elements alphastring) sub)
+         (5, liftM3 OpExp op sub sub)
+         --(1, liftM2 LamExp (elements alphastring) sub)
        ]
  where
    sub = exp' alphastring
