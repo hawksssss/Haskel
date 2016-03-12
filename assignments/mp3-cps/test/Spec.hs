@@ -16,9 +16,6 @@ main = do {
           ; testProp (prop_isSimple, "isSimple", isSimpleTests)
           ; testCases (evalStmt, "Given Cases", cpsDeclTests)
           ; testCases (evalStmt, "Student Written Cases", studentCpsDeclTests)
-          ; xs <- (sample' (stmt' 100))
-          ; print xs
-          ; print (gatherVars ((AppExp (VarExp "k") (VarExp "v"))))
           }
 
 {- DO NOT MODIFY BELOW THIS LINE! -}
