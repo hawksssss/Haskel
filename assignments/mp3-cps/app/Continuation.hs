@@ -58,7 +58,7 @@ isSimple (IfExp e1 e2 e3) = isSimple e1 && (isSimple e2) && (isSimple e3)
  --------------------------------------}
 cpsDecl :: Stmt -> Stmt
 
-cpsDecl (Decl s1 xx e) = Decl s1 (xx++["k"]) e1
+cpsDecl (Decl s1 xx e) = Decl (s1++"k") (xx++["k"]) e1
           where (e1,_) = cpsExp e (VarExp "k") 1
 
 cpsExp :: Exp -> Exp -> Integer -> (Exp,Integer)
