@@ -66,18 +66,18 @@ intExp = do i <- int
 varExp = do v <- var
             return $ VarExp v
 
-mulOp =    do { symbol "*" ; return $ OpExp "*" }
-       <|> do { symbol "/" ; return $ OpExp "/" }
+mulOp =    do try $ do { symbol "*" ; return $ OpExp "*" }
+       <|> do try $ do { symbol "/" ; return $ OpExp "/" }
 
-addOp =    do { symbol "+" ; return $ OpExp "+" }
-       <|> do { symbol "-" ; return $ OpExp "-" }
+addOp =    do try $ do { symbol "+" ; return $ OpExp "+" }
+       <|> do try $ do { symbol "-" ; return $ OpExp "-" }
 
-compOp =   do { symbol "<" ; return $ OpExp "<" }
-       <|> do { symbol ">" ; return $ OpExp ">" }
-       <|> do { symbol "<=" ; return $ OpExp "<=" }
-       <|> do { symbol ">=" ; return $ OpExp ">=" }
-       <|> do { symbol "/=" ; return $ OpExp "/=" }
-       <|> do { symbol "==" ; return $ OpExp "==" }
+compOp =   do try $ do { symbol "<" ; return $ OpExp "<" }
+       <|> do try $ do { symbol ">" ; return $ OpExp ">" }
+       <|> do try $ do { symbol "<=" ; return $ OpExp "<=" }
+       <|> do try $ do { symbol ">=" ; return $ OpExp ">=" }
+       <|> do try $ do { symbol "/=" ; return $ OpExp "/=" }
+       <|> do try $ do { symbol "==" ; return $ OpExp "==" }
 
 ifExp = do try $ symbol "if"
            e1 <- expr

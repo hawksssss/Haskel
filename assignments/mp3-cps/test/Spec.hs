@@ -17,16 +17,15 @@ main = do {
           ; testCases (evalStmt, "Given Cases", cpsDeclTests)
           ; testCases (evalStmt, "Student Written Cases", studentCpsDeclTests)
           ; xs <- (sample' (stmt' 100))
+          ; putStrLn ""
           ; putStrLn "\nAnd some test cases for you..."
-          ; results <- mapM (\x -> do { putStr "Test: "
+          ; mapM_ (\x -> do { putStr "Test: "
                                       ; print x
                                       ; putStr "\t"
                                       ; print (C.cpsDecl x)
                                       ; putStr "\n"
-                                      })
-                            xs
-          ; putStrLn ""
-          ; putStrLn "And some test cases for you..."
+                  })
+                  xs
           }
 
 {- DO NOT MODIFY BELOW THIS LINE! -}
@@ -72,14 +71,6 @@ gatherVars (IfExp e1 e2 e3) = gatherVars e1 ++ gatherVars e2 ++ gatherVars e3
 gatherVars (OpExp _ e1 e2) = gatherVars e1 ++ gatherVars e2
 gatherVars _ = []
 
-{-
-           where
-             paramList = take (mod n 26) (map (\x -> [x]) ['a' .. 'z'])
-             fname = listOf1 (elements ['a' .. 'z'])
-             expr = exp' paramList
-             params = (liftM gatherVars expr)
--}
-
 instance Arbitrary Exp where
   arbitrary = exp' alphastring
     where
@@ -87,7 +78,7 @@ instance Arbitrary Exp where
 
 exp' alphastring = frequency [
          (10, liftM VarExp (elements alphastring)),
-         (10, liftM IntExp arbitrary),
+         (10, liftM IntExp (choose (1,1000000))),
          (1, liftM2 AppExp sub sub),
          (5, liftM3 IfExp sub sub sub),
          (5, liftM3 OpExp op sub sub)
@@ -95,7 +86,8 @@ exp' alphastring = frequency [
        ]
  where
    sub = exp' alphastring
-   op = elements ["*", "/", "+", "-", "<", ">", "==", "<=", "=>", "/="]
+   op = elements ["*", "/", "+", "-", "<", ">", "==", "<=", ">="]
+
 
 {----------------------------------
  - Tests for factk
