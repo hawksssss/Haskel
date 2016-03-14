@@ -66,24 +66,24 @@ cpsExp (IntExp i) k j = (AppExp k (IntExp i), j)
 cpsExp (VarExp v) k j = (AppExp k (VarExp v), j)
 cpsExp (AppExp e1 e2) k j
               | isSimple e2 = (AppExp (AppExp e1 e2) k, j)
-              | otherwise = cpsExp e2 (LamExp m (AppExp (AppExp e1 (VarExp m)) k)) (j + 1)
-                  where (m,_) = gensym j
+              | otherwise = cpsExp e2 (LamExp m (AppExp (AppExp e1 (VarExp m)) k)) j1
+                  where (m,j1) = gensym j
 
 cpsExp (IfExp e1 e2 e3) k j
-                 | isSimple e1 = (IfExp e1 e4 e5, j)
-                 | otherwise = cpsExp e1 (LamExp m (IfExp (VarExp m) e4 e5)) (j + 1)
-                     where (e4,_) = cpsExp e2 k j
-                           (e5,_) = cpsExp e3 k j
-                           (m,_) = gensym j
+                 | isSimple e1 = (IfExp e1 e4 e5, j2)
+                 | otherwise = cpsExp e1 (LamExp m (IfExp (VarExp m) e4 e5)) j3
+                     where (e4,j1) = cpsExp e2 k j
+                           (e5,j2) = cpsExp e3 k j1
+                           (m,j3) = gensym j2
 
 cpsExp (OpExp s e1 e2) k j
               | isSimple e1 && (isSimple e2) = (AppExp k (OpExp s e1 e2), j)         
-              | not (isSimple e1) && (isSimple e2) = cpsExp e1 (LamExp v (AppExp k (OpExp s (VarExp v) e2))) (j + 1)
-              | isSimple e1 && (not (isSimple e2)) = cpsExp e2 (LamExp v (AppExp k (OpExp s e1 (VarExp v)))) (j + 1)
-              | otherwise = cpsExp e1 (LamExp v e3) l
-                 where (v,_) = gensym j
-                       (e3,l) = cpsExp e2 (LamExp v1 (AppExp k (OpExp s (VarExp v) (VarExp v1)))) (j + 2)
-                       (v1,_) = gensym (j + 1)
+              | not (isSimple e1) && (isSimple e2) = cpsExp e1 (LamExp v (AppExp k (OpExp s (VarExp v) e2))) j1
+              | isSimple e1 && (not (isSimple e2)) = cpsExp e2 (LamExp v (AppExp k (OpExp s e1 (VarExp v)))) j1
+              | otherwise = cpsExp e1 (LamExp v e3) j3
+                 where (v,j1) = gensym j
+                       (e3,j3) = cpsExp e2 (LamExp v1 (AppExp k (OpExp s (VarExp v) (VarExp v1)))) j2
+                       (v1,j2) = gensym j1
                        
 {--------------------------------------
  - Helper Functions
