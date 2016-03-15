@@ -35,9 +35,17 @@ unifyVar x _ = x
 unify :: Entity -> Entity -> Env -> Env
 unify x y bindings = aux (unifyVar x bindings) (unifyVar y bindings) bindings
   where aux (Var s) x bindings = add s x bindings
-        aux x (Var s) bindings = -- ???
-        aux (Object f ff) (Object g gg) bindings = -- ??
+        aux x (Var s) bindings = add s x bindings
+        aux (Object f ff) (Object g gg) bindings 
+             | f == g && length ff == length gg =
+              foldr (\(e1,e2) env' -> unify e1 e2 env') bindings $ zip ff gg
 
 
 
         aux _ _ _ = H.empty
+
+
+e1 = Var "alpha"
+e2 = Object "x" []
+
+--unify e1 e2 initial
