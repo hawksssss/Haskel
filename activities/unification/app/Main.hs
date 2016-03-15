@@ -3,7 +3,7 @@ module Main where
 import Lib
 
 import qualified Data.HashMap.Strict as H
-import Data.Maybe
+import Data.Maybe (fromJust)
 import Data.List (intersperse)
 
 data Entity = Var String
@@ -21,7 +21,8 @@ initial :: Env
 initial = H.empty
 
 add :: String -> Entity -> Env -> Env
-add x y b = H.insert x y b
+add x y b = let nuhash = H.insert x y b
+             in H.map (flip unifyVar nuhash) nuhash
 
 contains :: String -> Env -> Bool
 contains x b = H.member x b
@@ -30,7 +31,8 @@ unifyVar :: Entity -> Env -> Entity
 unifyVar x@(Var t) bindings
    | contains t bindings = fromJust $ H.lookup t bindings
    | otherwise = x
-unifyVar x _ = x
+unifyVar (Object f xx) bindings =
+  Object f (map (flip unifyVar bindings) xx)
 
 unify :: Entity -> Entity -> Env -> Env
 unify x y bindings = aux (unifyVar x bindings) (unifyVar y bindings) bindings
