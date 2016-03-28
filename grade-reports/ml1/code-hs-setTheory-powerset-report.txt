@@ -1,0 +1,49 @@
+==================================================================
+= Grade Report
+= Net ID: szhao28
+==================================================================
+= Base Grade: 10
+= Point Adjustments: 0
+= Extra Credit: 0
+==================================================================
+= Final Grade: 10
+==================================================================
+
+
+==================================================================
+= General Comments
+==================================================================
+
+
+-   (-0) `powerset`:
+You can also use `union` and `add` to implement powerset:
+
+powerset []     = [[]]
+powerset (x:xs) = let pxs = powerset xs
+in  union pxs (map (add x) pxs)
+
+
+==================================================================
+= Output
+==================================================================
+
+Passed QuickChecks for powerset.
+
+==================================================================
+= Original Code
+==================================================================
+module Mp1 where
+import qualified Data.List as List
+
+add :: (Ord a) => a -> [a] -> [a]
+add n xs = List.sort (List.nub (List.insert n xs))
+
+union :: (Ord a) => [a] -> [a] -> [a]
+union xs ys = List.sort (List.nub (List.union xs ys))
+
+intersect :: (Ord a) => [a] -> [a] -> [a]
+intersect xs ys = List.sort (List.nub (List.intersect xs ys))
+
+-- Your code goes here.
+powerset [] = [[]]
+powerset (x:xs) = [[]] ++ [(x:xx) | xx <- (powerset xs)] ++ [xx | xx <- (powerset xs), xx/=[]]
