@@ -316,6 +316,7 @@ instance Show Val where
     show (DefVal s v)       = s
     show (Closure s e env)  = "*closure*"
     show (ConsVal v1 v2)    = "(" ++ (showCons (ConsVal v1 v2)) ++ ")"
+    show (Macro s e env)  = "*macro*"
 
 -- helper
 showCons :: Val -> String
