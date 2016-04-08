@@ -27,11 +27,28 @@ data Val = IntVal Integer
          | ConsVal Val Val
          | Macro [String] Exp Env
 
+instance Eq Exp where
+    IntExp i1 == IntExp i2  = i1 == i2
+    SymExp s1 == SymExp s2  = s1 == s2
+    SExp s1   == SExp   s2  = s1 == s2
+--instance Eq Val where
+--    (IntVal i1) == (IntVal i2) = (i1 == i2)
+--    (SymVal s1) == (SymVal s2) = (s1 == s2)
+--    _ == _ = False
 instance Eq Val where
-    (IntVal i1) == (IntVal i2) = (i1 == i2)
-    (SymVal s1) == (SymVal s2) = (s1 == s2)
+    IntVal i1 == IntVal i2  = i1 == i2
+    SymVal s1 == SymVal s2  = s1 == s2
+    ExnVal s1 == ExnVal s2  = s1 == s2
+    PrimVal _ == PrimVal _  = True                          -- Can't really test functional equality
+    Closure ss1 e1 env1 == Closure ss2 e2 env2
+                            = ss1 == ss2 && e1 == e2 && env1 == env2
+    DefVal s1 v1 == DefVal s2 v2
+                            = s1 == s2 && v1 == v2
+    ConsVal v11 v12 == ConsVal v21 v22
+                            = v11 == v21 && v12 == v22
+    Macro ss1 e1 env1 == Macro ss2 e2 env2
+                            = ss1 == ss2 && e1 == e2 && env1 == env2
     _ == _ = False
-
 -- Parsers
 -- -------
 
@@ -186,13 +203,15 @@ liftCar :: Val
 liftCar = PrimVal (\inp -> 
         case inp of 
             (ConsVal v1 v2):xs -> v1
-            x:xs -> ExnVal $ "Not a cons cell: " ++ (show x))
+            x:xs -> ExnVal $ "Not a cons cell: " ++ (show x)
+            [] -> ExnVal $ "Not a cons cell: " ++ "[]")
 
 liftCdr :: Val
 liftCdr = PrimVal (\inp -> 
         case inp of 
             (ConsVal v1 v2):xs -> v2
-            x:xs -> ExnVal $ "Not a cons cell: " ++ (show x))
+            x:xs -> ExnVal $ "Not a cons cell: " ++ (show x)
+            [] -> ExnVal $ "Not a cons cell: " ++ "[]")
 
 -- Pretty name for the Env type
 type Env = H.HashMap String Val
@@ -241,7 +260,7 @@ eval (IntExp i) env                                    --- integers
 eval (SymExp s) env =
       case (H.lookup s env) of
            Just v -> v
-           Nothing -> ExnVal $ "Symbol " ++ s ++ " has no value"
+           Nothing -> ExnVal $ "Symbol " ++ s ++ " has no value."
            --Nothing -> SymVal s
 
 eval (SExp []) env = SymVal "nil"
@@ -298,7 +317,8 @@ eval (SExp (x:xs)) env =
                                   where e1 = unquote v1
                                         v1 = eval e (H.union (H.fromList 
                                             (zip ss (map quote xs))) env1)                
-              _ -> ExnVal ("Symbol " ++ (show x) ++ " has no value.")
+              _ -> eval x env
+              --_ -> ExnVal ("Symbol " ++ (show x) ++ " has no value.")
 
 
 
