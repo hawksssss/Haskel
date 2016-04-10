@@ -108,6 +108,17 @@ condFormOrig =  (   [ [ "(cond ((> 4 3) 'a (> 4 2) 'b))", "(cond ((< 4 3) 'a (> 
                 ,   [ "Do you handle the `cond` form correctly in `eval`?" ]
                 )
 
+letFormOrig :: ([[String]], [String])
+letFormOrig =   (   [ [ "(let ((x 5) (y 10)) (+ x y))", "(def x 20)", "(def y 30)"
+                      , "(let ((x 11) (y 4)) (- (* x y) 2))", "x", "y"
+                      ]
+                    ]
+
+                ,   [ "Do you handle the `let` form correctly in `eval`?" ]
+                )
+
+
+
 everythingElseOrig :: ([[String]], [String])
 everythingElseOrig =    (   [ ["435"]
                             , ["(def x 5)", "x", "y"]
@@ -116,9 +127,6 @@ everythingElseOrig =    (   [ ["435"]
                             , ["()"]
                             , ["'a", "'5", "(quote a)" , "'a", "'asdf", "'*first-val*"]
                             , [ "(define fact (n) (cond ((< n 1) 1 't (* n (fact (- n 1))))))", "(fact 5)"]
-                            , [ "(let ((x 5) (y 10)) (+ x y))", "(def x 20)", "(def y 30)"
-                              , "(let ((x 11) (y 4)) (- (* x y) 2))", "x", "y"
-                              ]
                             , [ "'a", "''a", "(car (quote (a b c)))", "(car '(a b c))"
                               , "(car ''(a b c))", "'(2 3 4)", "(list (+ 2 3))", "'( (+ 2 3))", "'(+ 2 3)"
                               ]

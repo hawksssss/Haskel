@@ -2,6 +2,7 @@ module Spec where
 
 import qualified Data.HashMap.Strict as H
 import Text.ParserCombinators.Parsec hiding (Parser)
+import Data.List (isInfixOf)
 import Main
 import Tests
 
@@ -58,24 +59,34 @@ passesParser :: TestCase -> Bool
 passesParser (input, exps, _) = genExps input == exps
 
 passesEvaluator :: TestCase -> Bool
-passesEvaluator (_, exps, val) = show (genVals exps runtime) == val
+passesEvaluator (_, exps, val) = let result = show (genVals exps runtime)
+                                 --in  result == val
+                                 in  (result == val || bothHaveExn val result)
+    where
+        bothHaveExn v r =    "Exception" `isInfixOf` v
+                          && "Exception" `isInfixOf` r
+
+-- passesEvaluator (_, exps, val) = let result = show (genVals exps runtime)
+--                                  in  result == val
+
 
 -- Pretty failed results
-prettyTestOut :: (TestCase -> String) -> TestCase -> [String]
-prettyTestOut testOutput test@(input, exps, _)
-    =   [ "#### Test case"
-        , ""
-        , "```"
-        ] ++ input ++
-        [ "```"
-        , ""
-        , "#### Should be:"
-        , show exps
-        , ""
-        , "#### But actually is:"
-        , testOutput test
-        , ""
-        ]
+prettyTestOut :: (TestCase -> (String, String)) -> TestCase -> [String]
+prettyTestOut testOutput test@(input, _, _)
+    = let   (shouldBe, actuallyIs) = testOutput test
+      in    [ "#### Test case"
+            , ""
+            , "```"
+            ] ++ input ++
+            [ "```"
+            , ""
+            , "#### Should be:"
+            , shouldBe
+            , ""
+            , "#### But actually is:"
+            , actuallyIs
+            , ""
+            ]
 
 -- Running test suites
 testSuite :: ([TestCase] -> [TestCase]) -> (TestCase -> [String]) -> TestSuite -> [String]
@@ -106,16 +117,17 @@ allTests =  [ basicIntsSyms
             , consListCarCdr
             , defDefineLambdaApply
             , condForm
+            , letForm
             , everythingElse
             , nestedQuasiQuotes
             ]
 
 -- Do the run
 runTests :: [TestSuite] -> IO [()]
-runTests tests = let parsdOut   = show . genExps . (\(input, _, _) -> input)
-                     evaldOut   = show . flip genVals runtime . (\(_, exps, _) -> exps)
+runTests tests = let parsdOut   = (\(input, exps, _) -> (show exps, show . genExps $ input))
+                     evaldOut   = (\(_, exps, val) -> (val, show . flip genVals runtime $ exps))
                      failsParse = filter (not . passesParser)
-                     failsEval  = filter (not . passesParser)
+                     failsEval  = filter (not . passesEvaluator)
                      parsdOuts  = concatMap (testSuite failsParse $ prettyTestOut parsdOut) tests
                      evaldOuts  = concatMap (testSuite failsEval $ prettyTestOut evaldOut) tests
                  in  mapM putStrLn $    [ ""
@@ -164,6 +176,7 @@ testSuites =    [ ("Basic Integers/Symbols", "basicIntsSyms", basicIntsSymsOrig)
                 , ("Cons, List, Car, Cdr", "consListCarCdr", consListCarCdrOrig)
                 , ("Definition, Application", "defDefineLambdaApply", defDefineLambdaApplyOrig)
                 , ("`cond` form", "condForm", condFormOrig)
+                , ("`let` form", "letForm", letFormOrig)
                 , ("Everything else", "everythingElse", everythingElseOrig)
                 , ("Nested Quasiquoting", "nestedQuasiQuotes", nestedQuasiQuotesOrig)
                 ]
@@ -173,7 +186,6 @@ main = mapM (putStrLn . genTestSuiteOut) testSuites
 
 -- Generated Tests
 -- ---------------
-
 basicIntsSyms :: TestSuite
 basicIntsSyms = ("Basic Integers/Symbols", [(["435"],[IntExp 435],"[435]"),(["a"],[SymExp "a"],"[*** Scheme-Exception: Symbol a has no value. ***]"),(["a","555"],[SymExp "a",IntExp 555],"[*** Scheme-Exception: Symbol a has no value. ***,555]"),(["555","a"],[IntExp 555,SymExp "a"],"[555,*** Scheme-Exception: Symbol a has no value. ***]")],["Do you handle basic integer/symbol parsing correctly?","Do you generate an `ExnVal` on failed symbol lookup?","Do you continue evaluation in the `repl` even after a parse error?"])
 primitiveInts :: TestSuite
@@ -188,8 +200,9 @@ defDefineLambdaApply :: TestSuite
 defDefineLambdaApply = ("Definition, Application", [(["(def x (+ 10 20))","x","y"],[SExp [SymExp "def",SymExp "x",SExp [SymExp "+",IntExp 10,IntExp 20]],SymExp "x",SymExp "y"],"[x,30,*** Scheme-Exception: Symbol y has no value. ***]"),(["(def x 1)","(define inc (y) (+ y x))","(inc 10)","(def x 2)","(inc 10)"],[SExp [SymExp "def",SymExp "x",IntExp 1],SExp [SymExp "define",SymExp "inc",SExp [SymExp "y"],SExp [SymExp "+",SymExp "y",SymExp "x"]],SExp [SymExp "inc",IntExp 10],SExp [SymExp "def",SymExp "x",IntExp 2],SExp [SymExp "inc",IntExp 10]],"[x,inc,11,x,11]"),(["(lambda (x) (+ x 10))","( (lambda (x) (+ x 10)) 20)","(define mkInc (x) (lambda (y) (+ x y)))","(def i2 (mkInc 2))","(i2 10)"],[SExp [SymExp "lambda",SExp [SymExp "x"],SExp [SymExp "+",SymExp "x",IntExp 10]],SExp [SExp [SymExp "lambda",SExp [SymExp "x"],SExp [SymExp "+",SymExp "x",IntExp 10]],IntExp 20],SExp [SymExp "define",SymExp "mkInc",SExp [SymExp "x"],SExp [SymExp "lambda",SExp [SymExp "y"],SExp [SymExp "+",SymExp "x",SymExp "y"]]],SExp [SymExp "def",SymExp "i2",SExp [SymExp "mkInc",IntExp 2]],SExp [SymExp "i2",IntExp 10]],"[*closure*,30,mkInc,i2,12]")],["Do you handle constant definition correctly?","Do you handle function definition/closure application correctly?","Do you handle printing a `Closure` as `*closure*`?"])
 condForm :: TestSuite
 condForm = ("`cond` form", [(["(cond ((> 4 3) 'a (> 4 2) 'b))","(cond ((< 4 3) 'a (> 4 2) 'b))","(cond ((< 4 3) 'a (< 4 2) 'b))"],[SExp [SymExp "cond",SExp [SExp [SymExp ">",IntExp 4,IntExp 3],SExp [SymExp "quote",SymExp "a"],SExp [SymExp ">",IntExp 4,IntExp 2],SExp [SymExp "quote",SymExp "b"]]],SExp [SymExp "cond",SExp [SExp [SymExp "<",IntExp 4,IntExp 3],SExp [SymExp "quote",SymExp "a"],SExp [SymExp ">",IntExp 4,IntExp 2],SExp [SymExp "quote",SymExp "b"]]],SExp [SymExp "cond",SExp [SExp [SymExp "<",IntExp 4,IntExp 3],SExp [SymExp "quote",SymExp "a"],SExp [SymExp "<",IntExp 4,IntExp 2],SExp [SymExp "quote",SymExp "b"]]]],"[a,b,nil]")],["Do you handle the `cond` form correctly in `eval`?"])
+letForm :: TestSuite
+letForm = ("`let` form", [(["(let ((x 5) (y 10)) (+ x y))","(def x 20)","(def y 30)","(let ((x 11) (y 4)) (- (* x y) 2))","x","y"],[SExp [SymExp "let",SExp [SExp [SymExp "x",IntExp 5],SExp [SymExp "y",IntExp 10]],SExp [SymExp "+",SymExp "x",SymExp "y"]],SExp [SymExp "def",SymExp "x",IntExp 20],SExp [SymExp "def",SymExp "y",IntExp 30],SExp [SymExp "let",SExp [SExp [SymExp "x",IntExp 11],SExp [SymExp "y",IntExp 4]],SExp [SymExp "-",SExp [SymExp "*",SymExp "x",SymExp "y"],IntExp 2]],SymExp "x",SymExp "y"],"[15,x,y,42,20,30]")],["Do you handle the `let` form correctly in `eval`?"])
 everythingElse :: TestSuite
-everythingElse = ("Everything else", [(["435"],[IntExp 435],"[435]"),(["(def x 5)","x","y"],[SExp [SymExp "def",SymExp "x",IntExp 5],SymExp "x",SymExp "y"],"[x,5,*** Scheme-Exception: Symbol y has no value. ***]"),(["(f 10 30 x)"],[SExp [SymExp "f",IntExp 10,IntExp 30,SymExp "x"]],"[*** Scheme-Exception: Symbol f has no value. ***]"),(["+"],[SymExp "+"],"[*primitive*]"),(["()"],[SExp []],"[nil]"),(["'a","'5","(quote a)","'a","'asdf","'*first-val*"],[SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",IntExp 5],SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SymExp "asdf"],SExp [SymExp "quote",SymExp "*first-val*"]],"[a,5,a,a,asdf,*first-val*]"),(["(define fact (n) (cond ((< n 1) 1 't (* n (fact (- n 1))))))","(fact 5)"],[SExp [SymExp "define",SymExp "fact",SExp [SymExp "n"],SExp [SymExp "cond",SExp [SExp [SymExp "<",SymExp "n",IntExp 1],IntExp 1,SExp [SymExp "quote",SymExp "t"],SExp [SymExp "*",SymExp "n",SExp [SymExp "fact",SExp [SymExp "-",SymExp "n",IntExp 1]]]]]],SExp [SymExp "fact",IntExp 5]],"[fact,120]"),(["(let ((x 5) (y 10)) (+ x y))","(def x 20)","(def y 30)","(let ((x 11) (y 4)) (- (* x y) 2))","x","y"],[SExp [SymExp "let",SExp [SExp [SymExp "x",IntExp 5],SExp [SymExp "y",IntExp 10]],SExp [SymExp "+",SymExp "x",SymExp "y"]],SExp [SymExp "def",SymExp "x",IntExp 20],SExp [SymExp "def",SymExp "y",IntExp 30],SExp [SymExp "let",SExp [SExp [SymExp "x",IntExp 11],SExp [SymExp "y",IntExp 4]],SExp [SymExp "-",SExp [SymExp "*",SymExp "x",SymExp "y"],IntExp 2]],SymExp "x",SymExp "y"],"[15,x,y,42,20,30]"),(["'a","''a","(car (quote (a b c)))","(car '(a b c))","(car ''(a b c))","'(2 3 4)","(list (+ 2 3))","'( (+ 2 3))","'(+ 2 3)"],[SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SExp [SymExp "quote",SymExp "a"]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]]],SExp [SymExp "quote",SExp [IntExp 2,IntExp 3,IntExp 4]],SExp [SymExp "list",SExp [SymExp "+",IntExp 2,IntExp 3]],SExp [SymExp "quote",SExp [SExp [SymExp "+",IntExp 2,IntExp 3]]],SExp [SymExp "quote",SExp [SymExp "+",IntExp 2,IntExp 3]]],"[a,(quote a ),a,a,quote,(2 3 4 ),(5 ),((+ 2 3 ) ),(+ 2 3 )]"),(["'(+ 1 2)","(eval '(+ 1 2))","(eval ''(+ 1 2))","(eval (eval ''(+ 1 2)))","(def a '(+ x 1))","(def x 5)","(eval a)"],[SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]],SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]],SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]]],SExp [SymExp "eval",SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]]]],SExp [SymExp "def",SymExp "a",SExp [SymExp "quote",SExp [SymExp "+",SymExp "x",IntExp 1]]],SExp [SymExp "def",SymExp "x",IntExp 5],SExp [SymExp "eval",SymExp "a"]],"[(+ 1 2 ),3,(+ 1 2 ),3,a,x,6]"),(["(def a 5)","`(+ a 1)","`(+ ,a 1)"],[SExp [SymExp "def",SymExp "a",IntExp 5],SExp [SymExp "quasiquote",SExp [SymExp "+",SymExp "a",IntExp 1]],SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SymExp "a"],IntExp 1]]],"[a,(+ a 1 ),(+ 5 1 )]"),(["(defmacro if (con then else) `(cond (,con ,then 't ,else)))","(def a 5)","(if (> a 2) 10 20)","(if (< a 2) 10 20)","(define fact (n) (if (< n 1) 1 (* n (fact (- n 1)))))","(fact 10)","(defmacro mkplus (e) (if (eq? (car e) '-) (cons '+ (cdr e)) e))","(mkplus (- 5 4))"],[SExp [SymExp "defmacro",SymExp "if",SExp [SymExp "con",SymExp "then",SymExp "else"],SExp [SymExp "quasiquote",SExp [SymExp "cond",SExp [SExp [SymExp "unquote",SymExp "con"],SExp [SymExp "unquote",SymExp "then"],SExp [SymExp "quote",SymExp "t"],SExp [SymExp "unquote",SymExp "else"]]]]],SExp [SymExp "def",SymExp "a",IntExp 5],SExp [SymExp "if",SExp [SymExp ">",SymExp "a",IntExp 2],IntExp 10,IntExp 20],SExp [SymExp "if",SExp [SymExp "<",SymExp "a",IntExp 2],IntExp 10,IntExp 20],SExp [SymExp "define",SymExp "fact",SExp [SymExp "n"],SExp [SymExp "if",SExp [SymExp "<",SymExp "n",IntExp 1],IntExp 1,SExp [SymExp "*",SymExp "n",SExp [SymExp "fact",SExp [SymExp "-",SymExp "n",IntExp 1]]]]],SExp [SymExp "fact",IntExp 10],SExp [SymExp "defmacro",SymExp "mkplus",SExp [SymExp "e"],SExp [SymExp "if",SExp [SymExp "eq?",SExp [SymExp "car",SymExp "e"],SExp [SymExp "quote",SymExp "-"]],SExp [SymExp "cons",SExp [SymExp "quote",SymExp "+"],SExp [SymExp "cdr",SymExp "e"]],SymExp "e"]],SExp [SymExp "mkplus",SExp [SymExp "-",IntExp 5,IntExp 4]]],"[if,a,10,20,fact,3628800,mkplus,9]")],["Do you handle quotes, unquotes, quasiquotes, and macros correctly?"])
+everythingElse = ("Everything else", [(["435"],[IntExp 435],"[435]"),(["(def x 5)","x","y"],[SExp [SymExp "def",SymExp "x",IntExp 5],SymExp "x",SymExp "y"],"[x,5,*** Scheme-Exception: Symbol y has no value. ***]"),(["(f 10 30 x)"],[SExp [SymExp "f",IntExp 10,IntExp 30,SymExp "x"]],"[*** Scheme-Exception: Symbol f has no value. ***]"),(["+"],[SymExp "+"],"[*primitive*]"),(["()"],[SExp []],"[nil]"),(["'a","'5","(quote a)","'a","'asdf","'*first-val*"],[SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",IntExp 5],SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SymExp "asdf"],SExp [SymExp "quote",SymExp "*first-val*"]],"[a,5,a,a,asdf,*first-val*]"),(["(define fact (n) (cond ((< n 1) 1 't (* n (fact (- n 1))))))","(fact 5)"],[SExp [SymExp "define",SymExp "fact",SExp [SymExp "n"],SExp [SymExp "cond",SExp [SExp [SymExp "<",SymExp "n",IntExp 1],IntExp 1,SExp [SymExp "quote",SymExp "t"],SExp [SymExp "*",SymExp "n",SExp [SymExp "fact",SExp [SymExp "-",SymExp "n",IntExp 1]]]]]],SExp [SymExp "fact",IntExp 5]],"[fact,120]"),(["'a","''a","(car (quote (a b c)))","(car '(a b c))","(car ''(a b c))","'(2 3 4)","(list (+ 2 3))","'( (+ 2 3))","'(+ 2 3)"],[SExp [SymExp "quote",SymExp "a"],SExp [SymExp "quote",SExp [SymExp "quote",SymExp "a"]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]],SExp [SymExp "car",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "a",SymExp "b",SymExp "c"]]]],SExp [SymExp "quote",SExp [IntExp 2,IntExp 3,IntExp 4]],SExp [SymExp "list",SExp [SymExp "+",IntExp 2,IntExp 3]],SExp [SymExp "quote",SExp [SExp [SymExp "+",IntExp 2,IntExp 3]]],SExp [SymExp "quote",SExp [SymExp "+",IntExp 2,IntExp 3]]],"[a,(quote a ),a,a,quote,(2 3 4 ),(5 ),((+ 2 3 ) ),(+ 2 3 )]"),(["'(+ 1 2)","(eval '(+ 1 2))","(eval ''(+ 1 2))","(eval (eval ''(+ 1 2)))","(def a '(+ x 1))","(def x 5)","(eval a)"],[SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]],SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]],SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]]],SExp [SymExp "eval",SExp [SymExp "eval",SExp [SymExp "quote",SExp [SymExp "quote",SExp [SymExp "+",IntExp 1,IntExp 2]]]]],SExp [SymExp "def",SymExp "a",SExp [SymExp "quote",SExp [SymExp "+",SymExp "x",IntExp 1]]],SExp [SymExp "def",SymExp "x",IntExp 5],SExp [SymExp "eval",SymExp "a"]],"[(+ 1 2 ),3,(+ 1 2 ),3,a,x,6]"),(["(def a 5)","`(+ a 1)","`(+ ,a 1)"],[SExp [SymExp "def",SymExp "a",IntExp 5],SExp [SymExp "quasiquote",SExp [SymExp "+",SymExp "a",IntExp 1]],SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SymExp "a"],IntExp 1]]],"[a,(+ a 1 ),(+ 5 1 )]"),(["(defmacro if (con then else) `(cond (,con ,then 't ,else)))","(def a 5)","(if (> a 2) 10 20)","(if (< a 2) 10 20)","(define fact (n) (if (< n 1) 1 (* n (fact (- n 1)))))","(fact 10)","(defmacro mkplus (e) (if (eq? (car e) '-) (cons '+ (cdr e)) e))","(mkplus (- 5 4))"],[SExp [SymExp "defmacro",SymExp "if",SExp [SymExp "con",SymExp "then",SymExp "else"],SExp [SymExp "quasiquote",SExp [SymExp "cond",SExp [SExp [SymExp "unquote",SymExp "con"],SExp [SymExp "unquote",SymExp "then"],SExp [SymExp "quote",SymExp "t"],SExp [SymExp "unquote",SymExp "else"]]]]],SExp [SymExp "def",SymExp "a",IntExp 5],SExp [SymExp "if",SExp [SymExp ">",SymExp "a",IntExp 2],IntExp 10,IntExp 20],SExp [SymExp "if",SExp [SymExp "<",SymExp "a",IntExp 2],IntExp 10,IntExp 20],SExp [SymExp "define",SymExp "fact",SExp [SymExp "n"],SExp [SymExp "if",SExp [SymExp "<",SymExp "n",IntExp 1],IntExp 1,SExp [SymExp "*",SymExp "n",SExp [SymExp "fact",SExp [SymExp "-",SymExp "n",IntExp 1]]]]],SExp [SymExp "fact",IntExp 10],SExp [SymExp "defmacro",SymExp "mkplus",SExp [SymExp "e"],SExp [SymExp "if",SExp [SymExp "eq?",SExp [SymExp "car",SymExp "e"],SExp [SymExp "quote",SymExp "-"]],SExp [SymExp "cons",SExp [SymExp "quote",SymExp "+"],SExp [SymExp "cdr",SymExp "e"]],SymExp "e"]],SExp [SymExp "mkplus",SExp [SymExp "-",IntExp 5,IntExp 4]]],"[if,a,10,20,fact,3628800,mkplus,9]")],["Do you handle quotes, unquotes, quasiquotes, and macros correctly?"])
 nestedQuasiQuotes :: TestSuite
 nestedQuasiQuotes = ("Nested Quasiquoting", [(["(def a 5)","``(+ ,,a 1)","``(+ ,,a ,a)","`(+ a ,,a)","``(+ a ,,a)","(eval ``(+ ,,a 1))","(eval (eval ``(+ ,,a 1)))"],[SExp [SymExp "def",SymExp "a",IntExp 5],SExp [SymExp "quasiquote",SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]],IntExp 1]]],SExp [SymExp "quasiquote",SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]],SExp [SymExp "unquote",SymExp "a"]]]],SExp [SymExp "quasiquote",SExp [SymExp "+",SymExp "a",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]]]],SExp [SymExp "quasiquote",SExp [SymExp "quasiquote",SExp [SymExp "+",SymExp "a",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]]]]],SExp [SymExp "eval",SExp [SymExp "quasiquote",SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]],IntExp 1]]]],SExp [SymExp "eval",SExp [SymExp "eval",SExp [SymExp "quasiquote",SExp [SymExp "quasiquote",SExp [SymExp "+",SExp [SymExp "unquote",SExp [SymExp "unquote",SymExp "a"]],IntExp 1]]]]]],"[a,(quasiquote (+ (unquote 5 ) 1 ) ),(quasiquote (+ (unquote 5 ) (unquote a ) ) ),(+ a *** Scheme-Exception: Cannot `unquote` more than `quasiquote`. *** ),(quasiquote (+ a (unquote 5 ) ) ),(+ 5 1 ),6]")],["Do you handle nested quasiquotes?"])
-
