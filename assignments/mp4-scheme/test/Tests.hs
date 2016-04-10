@@ -149,6 +149,7 @@ nestedQuasiQuotesOrig :: ([[String]], [String])
 nestedQuasiQuotesOrig = (   [ [ "(def a 5)", "``(+ ,,a 1)", "``(+ ,,a ,a)", "`(+ a ,,a)", "``(+ a ,,a)"
                               , "(eval ``(+ ,,a 1))", "(eval (eval ``(+ ,,a 1)))"
                               ]
+                            , [ "(def a 5)", "```(+ ,,,a ,,a)", "```(+ ,a ,,a)", "```(+ `a `(+ ,,,,a a))" ]
                             ]
 
                         ,   [ "Do you handle nested quasiquotes?" ]
