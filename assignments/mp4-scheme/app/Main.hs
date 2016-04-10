@@ -168,10 +168,10 @@ liftIntBoolOp f = PrimVal (\inp ->
                                aux a f x [] = a
         _    -> liftbool True)
 
-liftBoolOp :: (Bool -> Bool -> Bool) -> Val
-liftBoolOp f = PrimVal (\inp -> 
+liftBoolOp :: (Bool -> Bool -> Bool) -> Bool -> Val
+liftBoolOp f b = PrimVal (\inp -> 
     case (map lowerbool inp) of 
-        xx@(x:xs) -> liftbool (aux True f xx)
+        xx@(x:xs) -> liftbool (aux b f xx)
                                where aux a f xx@(x:xs) = aux (f a x) f xs
                                      aux a f [] = a
         _    -> liftbool True)
@@ -228,8 +228,8 @@ runtime = H.fromList    [ ("+", liftIntOp (+) 0)
                         , ("<=", liftIntBoolOp (<=))                    
                         , ("=", liftIntBoolOp (==))                    
                         , ("!=", liftIntBoolOp (/=))  
-                        , ("and", liftBoolOp (&&))         
-                        , ("or", liftBoolOp (||))      
+                        , ("and", liftBoolOp (&&) True)         
+                        , ("or", liftBoolOp (||) False)      
                         , ("eq?", liftOther "eq?")
                         , ("not", liftOther "not")
                         , ("list", PrimVal liftList)
