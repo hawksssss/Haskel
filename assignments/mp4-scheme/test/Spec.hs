@@ -1,6 +1,6 @@
 module Spec where
 
--- Version 1.4.1
+-- Version 1.4.2
 
 import qualified Data.HashMap.Strict as H
 import Text.ParserCombinators.Parsec hiding (Parser)
@@ -12,26 +12,11 @@ import Tests
 -- Equality of Exp and Val
 -- -----------------------
 
--- We'll need equality over Exp/Val for testing the parser/evaluator
+-- We'll need equality over Exp for testing the parser
 instance Eq Exp where
     IntExp i1 == IntExp i2  = i1 == i2
     SymExp s1 == SymExp s2  = s1 == s2
     SExp s1   == SExp   s2  = s1 == s2
-    _         == _          = False
-
-instance Eq Val where
-    IntVal i1 == IntVal i2  = i1 == i2
-    SymVal s1 == SymVal s2  = s1 == s2
-    ExnVal s1 == ExnVal s2  = s1 == s2
-    PrimVal _ == PrimVal _  = True                          -- Can't really test functional equality
-    Closure ss1 e1 env1 == Closure ss2 e2 env2
-                            = ss1 == ss2 && e1 == e2 && env1 == env2
-    DefVal s1 v1 == DefVal s2 v2
-                            = s1 == s2 && v1 == v2
-    ConsVal v11 v12 == ConsVal v21 v22
-                            = v11 == v21 && v12 == v22
-    Macro ss1 e1 env1 == Macro ss2 e2 env2
-                            = ss1 == ss2 && e1 == e2 && env1 == env2
     _         == _          = False
 
 -- Run the parser/evaluator
