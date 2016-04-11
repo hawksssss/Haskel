@@ -1,0 +1,19 @@
+Last Updated: Sun, 10 Apr 2016 16:45:43
+
+================================
+= Point Breakdown
+================================
+
+1.0 of 1.0 points (with 0.0 guessing penalty) for: 	tf-unification-02
+4.0 of 4.0 points (with 0.0 guessing penalty) for: 	tf-llparsing-04
+3.0 of 4.0 points (with 0.0 guessing penalty) for: 	tf-smallstep-03
+
+Total Score: 8.0 of 9.0 points
+
+================================
+= Your Answers
+================================
+
+Your answer for tf-unification-02 was:     	['T']
+Your answer for tf-llparsing-04 was:     	['T', 'F', 'F', 'F']
+Your answer for tf-smallstep-03 was:     	['F', 'F', 'F', 'T']
