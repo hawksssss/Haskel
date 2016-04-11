@@ -264,23 +264,17 @@ eval (SymExp s) env =
            --Nothing -> SymVal s
 
 eval (SExp []) env = SymVal "nil"
+
+eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = DefVal s1 v 
+                                         where v = Closure (map aux yy) body (H.insert s1 v env)
+                                               aux (SymExp s) = s
+eval (SExp [SymExp "def", SymExp s1, body]) env = DefVal s1 v
+                                                    where v = eval body env
+eval (SExp [SymExp "lambda", SExp yy, body]) env = Closure (map aux yy) body env
+                                                      where aux (SymExp s) = s
+eval (SExp [SymExp "quote", x]) env = quote x
 eval (SExp (x:xs)) env =              
        case x of
-        SymExp "define" -> DefVal s1 v
-                          where e1:e2:e3:[] = xs
-                                SymExp s1 = e1
-                                SExp yy = e2
-                                v = Closure (map aux yy) e3 (H.insert s1 v env)
-                                    where aux (SymExp s) = s
-        SymExp "def" -> DefVal s1 v
-                       where e1:e2:[] = xs
-                             SymExp s1 = e1
-                             v = eval e2 env
-        SymExp "lambda" -> Closure (map aux yy) e2 env
-                             where e1:e2:[]=xs
-                                   SExp yy = e1
-                                   aux (SymExp s) = s
-        SymExp "quote" -> let (x:xx) = xs in (quote x)
         SymExp "cond" -> case xs of
             [SExp (x1:x2:xx)] -> if (eval x1 env == SymVal "t") 
                 then (eval x2 env) else (eval (SExp (x:[SExp xx])) env)
