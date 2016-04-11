@@ -254,9 +254,11 @@ unquote (SymVal s) = SymExp s
 unquote (IntVal i) = IntExp i
 unquote c = SExp (map unquote (lowerList c))
 
---checkParameter :: [Exp] -> Maybe [String]
---checkParameter ((SymExp s):xx) = s:ss 
---                          where ss = checkParameter xx
+checkParameter :: [Exp] -> Bool
+checkParameter xx = and (map aux xx)
+                where aux (SymExp s) = True
+                      aux _ = False
+
 -- This `eval` must handle every way an `Exp` could be constructed.
 eval :: Exp -> Env -> Val
 eval (IntExp i) env                                    --- integers
@@ -269,21 +271,17 @@ eval (SymExp s) env =
            --Nothing -> SymVal s
 
 eval (SExp []) env = SymVal "nil"
---eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = case (aux yy) of
-
---    DefVal s1 v 
---                                         where v = Closure (aux yy) body (H.insert s1 v env)
---                                               aux ((SymExp s):xx) = s:(aux xx)
---                                               aux (_:xx) = [ExnVal "Must use only `SymExp` for parameter names."]
---                                               aux [] = []
-
-eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = DefVal s1 v 
-                                         where v = Closure (map aux yy) body (H.insert s1 v env)
-                                               aux (SymExp s) = s
+eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = case (checkParameter yy) of
+    True -> DefVal s1 v 
+                where v = Closure (map aux yy) body (H.insert s1 v env)
+                      aux (SymExp s) = s
+    False -> ExnVal "Must use only `SymExp` for parameter names."
 eval (SExp [SymExp "def", SymExp s1, body]) env = DefVal s1 v
                                                     where v = eval body env
-eval (SExp [SymExp "lambda", SExp yy, body]) env = Closure (map aux yy) body env
-                                                      where aux (SymExp s) = s
+eval (SExp [SymExp "lambda", SExp yy, body]) env = case (checkParameter yy) of
+    True -> Closure (map aux yy) body env
+                 where aux (SymExp s) = s
+    False -> ExnVal "Must use only `SymExp` for parameter names."       
 eval (SExp [SymExp "quote", x]) env = quote x
 
 eval (SExp [SymExp "cond", SExp (x1:x2:xx)]) env = if (eval x1 env == SymVal "t") 
