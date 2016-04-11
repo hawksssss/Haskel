@@ -31,6 +31,7 @@ instance Eq Exp where
     IntExp i1 == IntExp i2  = i1 == i2
     SymExp s1 == SymExp s2  = s1 == s2
     SExp s1   == SExp   s2  = s1 == s2
+    _         == _          = False
 --instance Eq Val where
 --    (IntVal i1) == (IntVal i2) = (i1 == i2)
 --    (SymVal s1) == (SymVal s2) = (s1 == s2)
@@ -188,7 +189,7 @@ liftOther s = case s of
         case (map lowerbool inp) of 
             [False] -> liftbool True
             [True] -> liftbool False
-            _    -> ExnVal $ "Incorrect number of arguments. not form is unary.")
+            _    -> ExnVal $ "`not` is a unary operater.")
 
 liftList :: [Val] -> Val
 liftList (x:xs) = ConsVal x (liftList xs)
@@ -202,14 +203,16 @@ lowerList v = [v]
 liftCar :: Val
 liftCar = PrimVal (\inp -> 
         case inp of 
-            (ConsVal v1 v2):xs -> v1
+            [(ConsVal v1 v2)] -> v1
+            (ConsVal v1 v2):_:_ -> ExnVal $ "`car` is a unary operator."
             x:xs -> ExnVal $ "Not a cons cell: " ++ (show x)
             [] -> ExnVal $ "Not a cons cell: " ++ "[]")
 
 liftCdr :: Val
 liftCdr = PrimVal (\inp -> 
         case inp of 
-            (ConsVal v1 v2):xs -> v2
+            [(ConsVal v1 v2)] -> v2
+            (ConsVal v1 v2):_:_ -> ExnVal $ "`car` is a unary operator."
             x:xs -> ExnVal $ "Not a cons cell: " ++ (show x)
             [] -> ExnVal $ "Not a cons cell: " ++ "[]")
 
@@ -251,7 +254,9 @@ unquote (SymVal s) = SymExp s
 unquote (IntVal i) = IntExp i
 unquote c = SExp (map unquote (lowerList c))
 
-
+--checkParameter :: [Exp] -> Maybe [String]
+--checkParameter ((SymExp s):xx) = s:ss 
+--                          where ss = checkParameter xx
 -- This `eval` must handle every way an `Exp` could be constructed.
 eval :: Exp -> Env -> Val
 eval (IntExp i) env                                    --- integers
@@ -264,6 +269,13 @@ eval (SymExp s) env =
            --Nothing -> SymVal s
 
 eval (SExp []) env = SymVal "nil"
+--eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = case (aux yy) of
+
+--    DefVal s1 v 
+--                                         where v = Closure (aux yy) body (H.insert s1 v env)
+--                                               aux ((SymExp s):xx) = s:(aux xx)
+--                                               aux (_:xx) = [ExnVal "Must use only `SymExp` for parameter names."]
+--                                               aux [] = []
 
 eval (SExp [SymExp "define", SymExp s1, SExp yy, body]) env = DefVal s1 v 
                                          where v = Closure (map aux yy) body (H.insert s1 v env)
@@ -273,37 +285,33 @@ eval (SExp [SymExp "def", SymExp s1, body]) env = DefVal s1 v
 eval (SExp [SymExp "lambda", SExp yy, body]) env = Closure (map aux yy) body env
                                                       where aux (SymExp s) = s
 eval (SExp [SymExp "quote", x]) env = quote x
-eval (SExp (x:xs)) env =              
-       case x of
-        SymExp "cond" -> case xs of
-            [SExp (x1:x2:xx)] -> if (eval x1 env == SymVal "t") 
-                then (eval x2 env) else (eval (SExp (x:[SExp xx])) env)
-            [SExp _] -> SymVal "nil"
-        SymExp "let" ->  eval e env1
-                          where [SExp xx, e] = xs
-                                env1 = (H.union env2 env)
+
+eval (SExp [SymExp "cond", SExp (x1:x2:xx)]) env = if (eval x1 env == SymVal "t") 
+                then (eval x2 env) else (eval (SExp [SymExp "cond", SExp xx]) env)
+eval (SExp [SymExp "cond", SExp _]) env = SymVal "nil"
+eval (SExp [SymExp "let", SExp xx, e]) env = eval e env1
+                          where env1 = (H.union env2 env)
                                 env2 = H.fromList (zip s1 v1)
                                 s1 = map aux1 xx
                                 aux1 (SExp [SymExp s,_]) = s
                                 v1 = map (flip eval env) vv
                                 vv = map aux2 xx
                                 aux2 (SExp [_,e1]) = e1
-        SymExp "cons" -> ConsVal (eval e1 env) (eval e2 env)
-                         where [e1, e2] = xs
-        SymExp "eval" -> let (x:xx) = xs; v = eval x env; e = unquote v in (eval e env)
-        SymExp "quasiquote" -> quasiquote x1
-                                 where x1 = head xs
-                                       quasiquote (SExp [SymExp "unquote", e]) = eval e env
+eval (SExp [SymExp "cons", e1, e2]) env = ConsVal (eval e1 env) (eval e2 env)
+eval (SExp [SymExp "eval", x]) env = eval e env
+                            where e = unquote v
+                                  v = eval x env
+eval (SExp [SymExp "quasiquote", x]) env = quasiquote x
+                                 where quasiquote (SExp [SymExp "unquote", e]) = eval e env
                                        quasiquote (SymExp s) = SymVal s
                                        quasiquote (IntExp i) = IntVal i
                                        quasiquote (SExp xx) = liftList (map quasiquote xx)
-        SymExp "defmacro" -> DefVal s1 v
-                          where e1:e2:e3:[] = xs
-                                SymExp s1 = e1
-                                SExp yy = e2
-                                v = Macro (map aux yy) e3 (H.insert s1 v env)
+eval (SExp [SymExp "unquote", x]) env = ExnVal "Cannot `unquote` more than `quasiquote`."
+eval (SExp [SymExp "defmacro", SymExp s1, SExp yy, body]) env = DefVal s1 v
+                          where v = Macro (map aux yy) body (H.insert s1 v env)
                                     where aux (SymExp s) = s
-        _ -> case (eval x env) of
+eval (SExp (x:xs)) env =              
+        case (eval x env) of
               PrimVal f -> f (map (flip eval env) xs)
               Closure ss e env1 -> eval e (H.union (H.fromList 
                 (zip ss (map (flip eval env) xs))) env1) 
@@ -325,7 +333,7 @@ instance Show Val where
     --show :: Val -> String
     show (IntVal i)         = show i
     show (SymVal s)         = s
-    show (ExnVal s)         = "*** Scheme-Exception: " ++ s
+    show (ExnVal s)         = "*** Scheme-Exception: " ++ s ++ " ***"
     show (PrimVal f)        = "*primitive*"
     show (DefVal s v)       = s
     show (Closure s e env)  = "*closure*"
