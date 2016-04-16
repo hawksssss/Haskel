@@ -1,0 +1,165 @@
+==================================================================
+= Grade Report
+= Net ID: szhao28
+==================================================================
+= Base Grade: 38 points
+= After Autograder: 37
+= Point Adjustments: 0
+==================================================================
+= Final Grade: 37
+==================================================================
+
+
+==================================================================
+= General Comments
+==================================================================
+
+
+==================================================================
+= Problem Comments
+==================================================================
+
+`evenoddk` messages
+--------
+
+
+`factk` messages
+--------
+
+
+
+==================================================================
+= Output
+==================================================================
+
+Passed QuickChecks for factk.
+Passed QuickChecks for evenoddk.
+Passed QuickChecks for isSimple.
+
+Running tests for Given Cases.
+Passed Test: "foo v = v"
+Passed Test: "foo v = 5"
+Passed Test: "foo f x = f x"
+Passed Test: "foo f x = if x then 1 else 0"
+Passed Test: "foo f x = if f x then 1 else 0"
+Passed Test: "foo x y = x + y"
+Passed Test: "foo f x y = f x + y"
+Passed Test: "foo f x y = x + f y"
+Passed Test: "foo f g x y = f x + g y"
+Passed Test: "foo x = if x > 5 then 1 else 0"
+Passed Test: "foo f x = if f x > 5 then 1 else 0"
+Passed Test: "ifapp f g h = (if (g > h) then f (g + 5) else f (h + 5))"
+Running tests for Student Written Cases.
+Passed Test: "foo v = v"
+
+Fuzzer Tests
+Fuzzer Run: Passed
+Fuzzer Run: Passed
+Fuzzer Run: Passed
+Fuzzer Run: Passed
+Decl "rqynagpy" ["e","z","e","c","w"] (IfExp (OpExp ">=" (IntExp 776767) (IfExp (VarExp "e") (AppExp (OpExp "+" (IntExp 234275) (VarExp "e")) (IntExp 807856)) (VarExp "w"))) (OpExp "<=" (AppExp (IntExp 244920) (IntExp 632274)) (IfExp (IntExp 761672) (VarExp "c") (IntExp 434187))) (VarExp "z"))
+Fuzzer Run: Failed
+Fuzzer Run: Passed
+Fuzzer Run: Passed
+Fuzzer Run: Passed
+Decl "bhtz" ["u","m","x","e","j","d","s","g","b","b","a","g","l","b","j","g","d","t","h","j","v","m","q","h","v","n","v","p","o","m","t","i","y","n","z","j","w","h","s","y","g","n","l","i","s","d","a","t","w","o","n","g","n","g","v","o","b","x","w","d","b","e","n","w","m","n","s","v","g","z","d"] (IfExp (IfExp (VarExp "j") (VarExp "h") (IfExp (IntExp 82508) (IfExp (IfExp (OpExp "/" (VarExp "n") (OpExp ">" (IntExp 784319) (VarExp "j"))) (OpExp "==" (VarExp "o") (VarExp "y")) (AppExp (IntExp 437414) (AppExp (VarExp "v") (VarExp "d")))) (OpExp "<" (VarExp "d") (IntExp 22277)) (IntExp 964753)) (VarExp "w"))) (VarExp "d") (IfExp (IntExp 377831) (OpExp "<=" (IntExp 781312) (IfExp (VarExp "w") (IfExp (IntExp 443903) (IfExp (OpExp ">" (IntExp 386711) (IntExp 678086)) (IntExp 138814) (VarExp "g")) (IntExp 399338)) (OpExp "*" (OpExp "<" (IfExp (IfExp (VarExp "x") (VarExp "g") (IfExp (OpExp "/" (OpExp "<" (OpExp "*" (VarExp "v") (OpExp ">" (IntExp 638199) (IfExp (VarExp "b") (OpExp "*" (VarExp "a") (AppExp (VarExp "m") (IntExp 60624))) (VarExp "m")))) (VarExp "z")) (IfExp (IfExp (IntExp 247912) (IntExp 934014) (IfExp (OpExp "-" (OpExp "+" (IntExp 490077) (IfExp (IfExp (VarExp "h") (IntExp 114706) (VarExp "e")) (VarExp "q") (IntExp 522640))) (OpExp "*" (OpExp ">" (IfExp (OpExp "==" (IntExp 846906) (VarExp "v")) (IfExp (OpExp "<" (IntExp 490725) (OpExp "<=" (VarExp "n") (VarExp "o"))) (IfExp (OpExp "/" (VarExp "g") (IfExp (VarExp "i") (VarExp "b") (OpExp ">=" (IfExp (VarExp "g") (IntExp 630202) (VarExp "s")) (VarExp "p")))) (OpExp ">=" (VarExp "a") (IfExp (IntExp 730165) (OpExp "-" (IfExp (IntExp 515596) (VarExp "b") (OpExp "*" (OpExp "/" (VarExp "n") (VarExp "u")) (IntExp 730208))) (VarExp "n")) (IntExp 667762))) (IntExp 61339)) (IfExp (IntExp 767538) (OpExp ">" (IntExp 982085) (VarExp "t")) (IntExp 833757))) (AppExp (VarExp "z") (VarExp "w"))) (VarExp "g")) (VarExp "x"))) (VarExp "b") (IfExp (VarExp "n") (VarExp "g") (IntExp 206998)))) (VarExp "j") (VarExp "v"))) (IfExp (IntExp 480707) (VarExp "t") (IntExp 779425)) (IfExp (VarExp "j") (IntExp 274495) (VarExp "d")))) (VarExp "g") (VarExp "t")) (IntExp 792501)) (IntExp 268130)))) (OpExp "*" (IntExp 90259) (OpExp "<=" (IfExp (IntExp 305867) (OpExp "<" (VarExp "s") (VarExp "o")) (OpExp "==" (IfExp (IntExp 210269) (VarExp "l") (AppExp (IfExp (IntExp 825186) (IntExp 712878) (OpExp ">=" (OpExp "*" (IntExp 990704) (IntExp 453669)) (IfExp (IfExp (VarExp "l") (VarExp "e") (IfExp (VarExp "w") (OpExp "<" (IfExp (OpExp "-" (IntExp 988652) (IntExp 961260)) (IfExp (VarExp "h") (IfExp (VarExp "v") (VarExp "d") (IntExp 963508)) (VarExp "s")) (VarExp "m")) (IfExp (IntExp 721579) (VarExp "m") (OpExp "<=" (IntExp 47845) (VarExp "n")))) (VarExp "n"))) (IfExp (IntExp 22799) (OpExp "-" (OpExp "/" (VarExp "y") (IntExp 350327)) (IntExp 413896)) (IntExp 785283)) (VarExp "s")))) (IntExp 736062))) (VarExp "b"))) (VarExp "i")))))
+Fuzzer Run: Failed
+Fuzzer Run: Passed
+
+==================================================================
+= Original Code
+==================================================================
+
+module Continuation where
+import Lib
+
+fixMe = error "fix me!"
+
+repl () =
+  do putStr "CPS> "
+     input <- getLine
+     case parseDecl input of
+        Right x -> let result = cpsDecl x
+                    in do putStrLn "Pretty Result: "
+                          putStrLn $ toStr result
+                          putStrLn "Details: "
+                          putStrLn $ show result
+                          putStrLn ""
+                          repl ()
+        Left x -> do putStrLn $ show x
+                     repl ()
+
+{--------------------------------------
+ - Problem 1: factk 
+ --------------------------------------}
+factk :: Integer -> (Integer -> a) -> a
+
+factk 0 k = k 1
+factk n k = factk (n-1) (\ v -> k (n * v))
+
+{--------------------------------------
+ - Problem 2: evenoddk
+ --------------------------------------}
+evenoddk :: Integral r => [r] -> (r -> t) -> (r -> t) -> t
+evenoddk [x] k1 k2
+         | even x = k1 x
+         | odd x = k2 x
+evenoddk (x:xs) k1 k2
+            | even x = evenoddk xs (\v -> k1 (v + x)) k2
+            | odd x = evenoddk xs k1 (\v -> k2 (v + x))
+
+
+{--------------------------------------
+ - Problem 3: isSimple
+ --------------------------------------}
+isSimple :: Exp -> Bool
+
+isSimple (IntExp a) = True
+
+isSimple (VarExp s) = True
+
+isSimple (AppExp e1 e2) = False
+
+isSimple (OpExp s e1 e2) = isSimple e1 && (isSimple e2)
+
+isSimple (IfExp e1 e2 e3) = isSimple e1 && (isSimple e2) && (isSimple e3)
+
+
+{--------------------------------------
+ - Problem 4: cpsDecl, cpsExp
+ --------------------------------------}
+cpsDecl :: Stmt -> Stmt
+
+cpsDecl (Decl s1 xx e) = Decl (s1++"k") (xx++["k"]) e1
+          where (e1,_) = cpsExp e (VarExp "k") 1
+
+cpsExp :: Exp -> Exp -> Integer -> (Exp,Integer)
+cpsExp (IntExp i) k j = (AppExp k (IntExp i), j)
+cpsExp (VarExp v) k j = (AppExp k (VarExp v), j)
+cpsExp (AppExp e1 e2) k j
+              | isSimple e2 = (AppExp (AppExp e1 e2) k, j)
+              | otherwise = cpsExp e2 (LamExp m (AppExp (AppExp e1 (VarExp m)) k)) j1
+                  where (m,j1) = gensym j
+
+cpsExp (IfExp e1 e2 e3) k j
+                 | isSimple e1 = (IfExp e1 e4 e5, j2)
+                 | otherwise = cpsExp e1 (LamExp m (IfExp (VarExp m) e4 e5)) j3
+                     where (e4,j1) = cpsExp e2 k j
+                           (e5,j2) = cpsExp e3 k j1
+                           (m,j3) = gensym j2
+
+cpsExp (OpExp s e1 e2) k j
+              | isSimple e1 && (isSimple e2) = (AppExp k (OpExp s e1 e2), j)         
+              | not (isSimple e1) && (isSimple e2) = cpsExp e1 (LamExp v (AppExp k (OpExp s (VarExp v) e2))) j1
+              | isSimple e1 && (not (isSimple e2)) = cpsExp e2 (LamExp v (AppExp k (OpExp s e1 (VarExp v)))) j1
+              | otherwise = cpsExp e1 (LamExp v e3) j3
+                 where (v,j1) = gensym j
+                       (e3,j3) = cpsExp e2 (LamExp v1 (AppExp k (OpExp s (VarExp v) (VarExp v1)))) j2
+                       (v1,j2) = gensym j1
+                       
+{--------------------------------------
+ - Helper Functions
+ --------------------------------------}
+
+gensym :: Integer -> (String,Integer)
+gensym i = ("v" ++ show i, i + 1)
