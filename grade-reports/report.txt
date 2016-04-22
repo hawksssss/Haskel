@@ -1,24 +1,41 @@
 Grade Report for Shan Zhao
-Produced 2016-03-03 15:09
+Produced 2016-04-22 12:05
 Netid: szhao28 uin: 678895860
 Course: cs421 (2016-01)  Section: B3  CRN: 31375
 
-                     Assignment  Status Raw Max    Norm Weight  Points 
-------------------------------- ------- --- --- ------- ------ ------- 
-                  MP1 - Haskell  Graded 116 126  92.06% 0.0750  6.9048 
-          HW1 - Lambda Calculus  Graded  49  60  81.67% 0.0750  6.1250 
-              MP2 - Interpreter Pending n/a 100     n/a 0.0000  0.0000 
-                  ML1 - Haskell Pending n/a 100     n/a 0.0000  0.0000 
-                      MP3 - CPS Pending n/a 100     n/a 0.0000  0.0000 
-                      ML2 - CPS Pending n/a 100     n/a 0.0000  0.0000 
-          Pre Course Assessment  Graded   1   1 100.00% 0.0125  1.2500 
-             Recursion Activity  Graded   1   1 100.00% 0.0125  1.2500 
-Higher Order Functions Activity  Graded   1   1 100.00% 0.0125  1.2500 
-  Algebraic Data Types Activity  Graded 100 100 100.00% 0.0125  1.2500 
-       Lambda Calculus Activity  Graded 100 100 100.00% 0.0125  1.2500 
-          Type Classes Activity  Graded 100 100 100.00% 0.0125  1.2500 
-                 Monad Activity  Graded 100 100 100.00% 0.0125  1.2500 
-               Grammar Activity  Graded   1   1 100.00% 0.0125  1.2500 
-            LL Parsing Activity Pending n/a   1     n/a 0.0000  0.0000 
-------------------------------- ------- --- --- ------- ------ ------- 
-                          Total                  92.12% 0.2500 23.0298 
+                     Assignment     Status Raw Max      Norm Weight   Points 
+------------------------------- ---------- --- --- --------- ------ -------- 
+                      Midterm 1 Calculated  88  88   100.00% 0.0800   8.0000 
+                 Haskell Guards             10  10                           
+               Haskell Patterns             10  10                           
+                     Using HOFs             10  10                           
+                   Writing HOFs             10  10                           
+                      Recursion             10  10                           
+                 Tail Recursion             10  10                           
+           Algebraic Data Types             20  20                           
+                Lambda Calculus              8   8                           
+                      Midterm 2    Pending     100                           
+                          Final    Pending     100                           
+                  MP1 - Haskell     Graded 116 126    92.06% 0.0214   1.9728 
+                  ML1 - Haskell Calculated  50 100    50.00% 0.0214   1.0714 
+              MP2 - Interpreter     Graded 315 315   100.00% 0.0429   4.2857 
+                      MP3 - CPS     Graded  37 130    28.46% 0.0214   0.6099 
+                      ML2 - CPS    Pending     100                           
+                   MP4 - Scheme    Pending     100                           
+              MP5 - Unification    Pending     100                           
+          HW1 - Lambda Calculus     Graded  49  60    81.67% 0.0214   1.7500 
+     HW2 - Grammars and Parsing     Graded  50 100    50.00% 0.0214   1.0714 
+ HW4 - Variables and Parameters    Pending     100                           
+          Pre Course Assessment     Graded   1   1   100.00% 0.0050   0.5000 
+             Recursion Activity     Graded   1   1   100.00% 0.0050   0.5000 
+Higher Order Functions Activity     Graded   1   1   100.00% 0.0050   0.5000 
+  Algebraic Data Types Activity     Graded 100 100   100.00% 0.0050   0.5000 
+       Lambda Calculus Activity     Graded 100 100   100.00% 0.0050   0.5000 
+          Type Classes Activity     Graded 100 100   100.00% 0.0050   0.5000 
+                 Monad Activity     Graded 100 100   100.00% 0.0050   0.5000 
+               Grammar Activity     Graded   1   1   100.00% 0.0050   0.5000 
+            LL Parsing Activity    Missing   0   1     0.00% 0.0050   0.0000 
+            LR Parsing Activity     Graded 100   1 10000.00% 0.0050  50.0000 
+           Unification Activity    Pending       1                           
+------------------------------- ---------- --- --- --------- ------ -------- 
+                          Total                      144.76% 1.0000 144.7613 
