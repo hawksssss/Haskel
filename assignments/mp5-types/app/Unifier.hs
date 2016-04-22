@@ -1,0 +1,72 @@
+module Unifier where
+import qualified Data.HashMap.Strict as H
+import Lib
+
+fixMe = error "fix me!"
+
+{---------------------------------------------
+ - Given Demo Environments
+ -   You might not want to modify this. ;)
+ ---------------------------------------------}
+phi :: SubstEnv
+phi = (H.insert 5 (FnTy BoolTy (TyVar 2)) H.empty)
+
+{---------------------------------------------
+ - Problem 1: substFun
+ ---------------------------------------------}
+substFun :: SubstEnv -> TyCon -> TyCon
+substFun env (TyVar i) = case (H.lookup i env) of 
+    Just t -> t
+    Nothing -> TyVar i
+substFun env t = error ((show t) ++ " is not a type variable!")
+
+{---------------------------------------------
+ - Problem 2: monoTyLiftSubst
+ ---------------------------------------------}
+monoTyLiftSubst :: SubstEnv -> TyCon -> TyCon
+monoTyLiftSubst env (PairTy t1 t2) = PairTy (monoTyLiftSubst env t1) (monoTyLiftSubst env t2)
+monoTyLiftSubst env (FnTy t1 t2) = FnTy (monoTyLiftSubst env t1) (monoTyLiftSubst env t2)
+monoTyLiftSubst env (ListTy t) = ListTy (monoTyLiftSubst env t)
+monoTyLiftSubst env (TyVar i) = substFun env (TyVar i)
+monoTyLiftSubst env t = t
+{---------------------------------------------
+ - Problem 3: occurs
+ ---------------------------------------------}
+occurs :: TyCon -> TyCon -> Bool
+occurs (TyVar i) (PairTy t1 t2) = (occurs (TyVar i) t1) || (occurs (TyVar i) t2)
+occurs (TyVar i) (FnTy t1 t2) = (occurs (TyVar i) t1) || (occurs (TyVar i) t2)
+occurs (TyVar i) (ListTy t) = occurs (TyVar i) t
+occurs (TyVar i) (TyVar j) = (i==j)
+occurs (TyVar i) _ = False
+
+ -- helper function
+isVar :: TyCon -> Bool
+isVar (TyVar i) = True
+isVar _ = False
+
+substEqnSet :: SubstEnv -> EqnSet -> EqnSet
+substEqnSet env [] = []
+substEqnSet env ((s, t):xx) = (monoTyLiftSubst env s, monoTyLiftSubst env t):(substEqnSet env xx)
+
+{---------------------------------------------
+ - Problem 4: unify
+ ---------------------------------------------}
+unify :: EqnSet -> Maybe SubstEnv
+unify [] = Just H.empty
+unify ((s, t):xx)
+    | s == t = unify xx
+    | (not (isVar s)) && (isVar t) = unify ((t, s):xx)
+unify ((PairTy s1 s2, PairTy t1 t2):xx) = unify ((s1,t1):(s2,t2):xx)
+unify ((FnTy s1 s2, FnTy t1 t2):xx) = unify ((s1,t1):(s2,t2):xx)
+unify ((ListTy s, ListTy t):xx) = unify ((s,t):xx)
+unify ((s@(TyVar i), t):xx) 
+    | (not (occurs s t)) = case (unify (substEqnSet (H.singleton i t) xx)) of 
+        Just env -> Just (H.insert i (monoTyLiftSubst env t) env)
+        Nothing -> Nothing
+unify _ = Nothing
+
+--phi' =
+--   (unify [(TyVar 0, ListTy IntTy), ((FnTy (TyVar 0) (TyVar 0)),
+--   (FnTy (TyVar 0) (TyVar 1)))])
+
+
