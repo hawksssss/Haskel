@@ -136,13 +136,19 @@ main = do {
           ; putStrLn ""
           ; putStrLn ""
           ; putStrLn "*********** QuickChecks ************"
-          ; testProp (prop_substFun U.phi, "substFun", [])
-          ; testProp (prop_monoTyLiftSubst U.phi, "monoTyLiftSubst", [])
+          ; substFunTest <- testPropRet (prop_substFun U.phi, "substFun", [])
+          ; monoTyLiftSubstTest <- testPropRet (prop_monoTyLiftSubst U.phi, "monoTyLiftSubst", [])
           ; testPropOnly (prop_occurs, "occurs")
-          ; let numTests = 10000
-          ; putStrLn $ "Running " ++ (show numTests) ++ " tests for unify... Please be patient!"
-          ; results <- mapM prop_unifyRedux [1..numTests]
-          ; putStrLn $ (if (and results) then "Passed" else "Failed") ++ " QuickChecks for unify."
+          ; if (substFunTest && monoTyLiftSubstTest)
+            then do {
+                    ; let numTests = 10000
+                    ; putStrLn $ "Running " ++ (show numTests) ++ " tests for unify... Please be patient!"
+                    ; results <- mapM prop_unifyRedux [1..numTests]
+                    ; putStrLn $ (if (and results) then "Passed" else "Failed") ++ " QuickChecks for unify."
+                    }
+            else do {
+                    ; putStrLn "Skipping unify test."
+                    }
           ; putStrLn ""
           ; putStrLn "*********** Student Tests **********"
           ; putStr "Question 1:  "
