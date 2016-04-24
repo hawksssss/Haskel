@@ -138,8 +138,8 @@ main = do {
           ; putStrLn "*********** QuickChecks ************"
           ; substFunTest <- testPropRet (prop_substFun U.phi, "substFun", [])
           ; monoTyLiftSubstTest <- testPropRet (prop_monoTyLiftSubst U.phi, "monoTyLiftSubst", [])
-          ; testPropOnly (prop_occurs, "occurs")
-          ; if (substFunTest && monoTyLiftSubstTest)
+          ; occursTest <- testPropOnlyRet (prop_occurs, "occurs")
+          ; if (substFunTest && monoTyLiftSubstTest && occursTest)
             then do {
                     ; let numTests = 10000
                     ; putStrLn $ "Running " ++ (show numTests) ++ " tests for unify... Please be patient!"
