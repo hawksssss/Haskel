@@ -27,7 +27,9 @@ executable mp5-types-exe
   build-depends:       base
                      , unordered-containers
                      , mp5-types
+                     , parsec
   other-modules:       Unifier
+                     , Parse
   default-language:    Haskell2010
 
 test-suite mp5-types-test
