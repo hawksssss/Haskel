@@ -24,11 +24,13 @@ pairty = try $ do {
 fnty = try $ do {
                 ; spaces
                 ; char '('
+                ; spaces
                 ; tc1 <- tycon
-                ; space
+                ; spaces
                 ; string "->"
-                ; space
+                ; spaces
                 ; tc2 <- tycon
+                ; spaces
                 ; char ')'
                 ; return (FnTy tc1 tc2)
                 }
@@ -36,7 +38,9 @@ fnty = try $ do {
 listty = try $ do {
                   ; spaces
                   ; char '['
+                  ; spaces
                   ; tc <- tycon
+                  ; spaces
                   ; char ']'
                   ; return (ListTy tc)
                   }
