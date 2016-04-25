@@ -126,6 +126,7 @@ prop_unifyRedux n = do {
                        ; rightTests <- sample' $ listOf1 (tycon' 1)
                        ; let intList = map TyVar [1..numVars]
                        ; let tests = zip intList (concat rightTests)
+--                       ; putStrLn ("Testing: " ++ (show tests)) -- Uncomment this line to see the test you're stuck on.
                        ; let actual = transformUnify $ U.unify tests
                        ; let test = sillyUnify tests []
                        ; result <- if (actual == test) then do {return True} else do { putStrLn "Failed\n\n"; print $ show tests; print actual; print test; return False}
