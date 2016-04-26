@@ -13,6 +13,7 @@ testProp (prop, propName, tests) = do {
                                       ; if (not $ isSuccess result)
                                         then (do {
                                                  ; putStrLn ("Failed QuickChecks for " ++ propName ++ ".")
+                                                 ; print result
                                                  ; mapM_ putStrLn (map (\test ->
                                                      if (not ((prop test)))
                                                      then ("\tFailed Test: " ++ (show test))
@@ -22,6 +23,27 @@ testProp (prop, propName, tests) = do {
                                        else putStrLn ("Passed QuickChecks for " ++ propName ++ ".")
                                       }
 
+testPropRet (prop, propName, tests) = do {
+                                         ; result <- silentQC prop
+                                         ; if (not $ isSuccess result)
+                                           then (do {
+                                                    ; putStrLn ("\nFailed QuickChecks for " ++ propName ++ ".")
+                                                    ; putStrLn ""
+                                                    ; putStrLn $ output result
+                                                    ; mapM_ putStrLn (map (\test ->
+                                                        if (not ((prop test)))
+                                                        then ("\tFailed Test: " ++ (show test))
+                                                        else ("\tPassed Test: " ++ (show test))
+                                                      ) tests)
+                                                    ; return False
+                                                 })
+                                          else (do {
+                                                   ; putStrLn ("Passed QuickChecks for " ++ propName ++ ".")
+                                                   ; return True
+                                                   }
+                                               )
+                                         }
+
 testPropOnly (prop, propName) = do {
                                    ; result <- silentQC prop
                                    ; if (not $ isSuccess result)
@@ -30,6 +52,22 @@ testPropOnly (prop, propName) = do {
                                           })
                                      else putStrLn ("Passed QuickChecks for " ++ propName ++ ".")
                                    }
+
+testPropOnlyRet (prop, propName) = do {
+                                      ; result <- silentQC prop
+                                      ; if (not $ isSuccess result)
+                                        then (do {
+                                                 ; putStrLn ("Failed QuickChecks for " ++ propName ++ ".")
+                                                 ; putStrLn ""
+                                                 ; putStrLn $ output result
+                                                 ; return False
+                                             })
+                                        else (do {
+                                                 ; putStrLn ("Passed QuickChecks for " ++ propName ++ ".")
+                                                 ; return True 
+                                                 }
+                                             )
+                                      }
 
 testCases (function, propName, tests) = do {
                                           ; putStrLn ("Running tests for " ++ propName ++ ".")

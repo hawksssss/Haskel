@@ -126,6 +126,7 @@ prop_unifyRedux n = do {
                        ; rightTests <- sample' $ listOf1 (tycon' 1)
                        ; let intList = map TyVar [1..numVars]
                        ; let tests = zip intList (concat rightTests)
+--                       ; putStrLn ("Testing: " ++ (show tests)) -- Uncomment this line to see the test you're stuck on.
                        ; let actual = transformUnify $ U.unify tests
                        ; let test = sillyUnify tests []
                        ; result <- if (actual == test) then do {return True} else do { putStrLn "Failed\n\n"; print $ show tests; print actual; print test; return False}
@@ -136,13 +137,19 @@ main = do {
           ; putStrLn ""
           ; putStrLn ""
           ; putStrLn "*********** QuickChecks ************"
-          ; testProp (prop_substFun U.phi, "substFun", [])
-          ; testProp (prop_monoTyLiftSubst U.phi, "monoTyLiftSubst", [])
-          ; testPropOnly (prop_occurs, "occurs")
-          ; let numTests = 10000
-          ; putStrLn $ "Running " ++ (show numTests) ++ " tests for unify... Please be patient!"
-          ; results <- mapM prop_unifyRedux [1..numTests]
-          ; putStrLn $ (if (and results) then "Passed" else "Failed") ++ " QuickChecks for unify."
+          ; substFunTest <- testPropRet (prop_substFun U.phi, "substFun", [])
+          ; monoTyLiftSubstTest <- testPropRet (prop_monoTyLiftSubst U.phi, "monoTyLiftSubst", [])
+          ; occursTest <- testPropOnlyRet (prop_occurs, "occurs")
+          ; if (substFunTest && monoTyLiftSubstTest && occursTest)
+            then do {
+                    ; let numTests = 10000
+                    ; putStrLn $ "Running " ++ (show numTests) ++ " tests for unify... Please be patient!"
+                    ; results <- mapM prop_unifyRedux [1..numTests]
+                    ; putStrLn $ (if (and results) then "Passed" else "Failed") ++ " QuickChecks for unify."
+                    }
+            else do {
+                    ; putStrLn "Skipping unify test."
+                    }
           ; putStrLn ""
           ; putStrLn "*********** Student Tests **********"
           ; putStr "Question 1:  "
