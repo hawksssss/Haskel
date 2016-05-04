@@ -1,0 +1,65 @@
+==================================================================
+= Grade Report
+= Net ID: szhao28
+==================================================================
+= Base Grade: : 11.0/16.0 points
+= Point Adjustments: 
+= Extra Credit Grade: 
+==================================================================
+= Final Grade: 16.0
+==================================================================
+
+
+
+==================================================================
+= Your Answers for midterm2-unification-elg
+==================================================================
+
+q0
+	 Your Answer: True
+	 Your Rationale:  
+	 Points Given: 2
+	 Adjustment: 0
+	 Final Score: 2
+q1
+	 Your Answer: True
+	 Your Rationale:  
+	 Points Given: 2
+	 Adjustment: 0
+	 Final Score: 2
+q2
+	 Your Answer: False
+	 Your Rationale: For the stated reason, RHS = Unify{(f(X,p(X,X))=f(X,X));(p(X,Y)=p(Y,X)),b=b}o{Z->f(X,X)}
+	 Points Given: 2
+	 Adjustment: 
+	 Final Score: 2
+q3
+	 Your Answer: True
+	 Your Rationale:  
+	 Points Given: 2
+	 Adjustment: 0
+	 Final Score: 2
+q4
+	 Your Answer: False
+	 Your Rationale: (X=X) can only be deleted, when RHS = Unify{(p(X,X)=X);(p(X,Y)=p(Y,X))}o{Z->f(X,X)}
+	 Points Given: 2
+	 Adjustment: 
+	 Final Score: 2
+q5
+	 Your Answer: False
+	 Your Rationale: For the stated reason, RHS = Unify{(p(X,X)=X);(X=Y);(Y=X)}o{Z->f(X,X)}
+	 Points Given: 2
+	 Adjustment: 
+	 Final Score: 2
+q6
+	 Your Answer: False
+	 Your Rationale:  We should eliminate (X=Y) to get RHS = Unify{(Y=p(Y,Y)),Y=Y}o{Z->f(Y,Y)}o{X->Y}
+	 Points Given: 2
+	 Adjustment: 
+	 Final Score: 2
+q7
+	 Your Answer: False
+	 Your Rationale:  We cannot eliminate (Y=p(Y,Y)) because Y appears in p(Y,Y). There is no unification solution.
+	 Points Given: 2
+	 Adjustment: 
+	 Final Score: 2

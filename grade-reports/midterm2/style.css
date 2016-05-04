@@ -1,0 +1,79 @@
+/*************************************
+ * Default Stylesheet for PrairieLearn
+ * v1.3: Fix codeBlock padding
+ *
+ * Written by Terence Nip
+ *************************************/
+
+/*****************************
+ * Proof Trees: Appearance
+ *****************************/
+
+#proofTreeContainer{
+   margin: 0;
+   margin:auto;
+   margin-top:3em;
+   text-align:center;
+   padding: 0;
+   width:99%;
+}
+
+.proofTreeLine {
+  margin:0;
+  padding:2em 0em 2.75em 0em;
+  border-top:2px solid black;
+  text-align:center;
+  margin-bottom:2px;
+  width:auto;
+}
+
+.proofTreeNest {
+  text-align:left;
+  margin:auto;
+}
+
+.proofTreeLabel {
+  font-size:0.75em;
+  position:relative;
+  left:0.5em;
+  text-align:left;
+  float:left;
+}
+
+.l0 {
+  width:100%;
+  margin:0;
+  margin:auto;
+  padding: 0.4em 0.75em 0.4em 0.25em;
+}
+
+
+
+/* Add/Edit/Delete */
+.proofTreeActions{
+  float:right;
+  position:relative;
+  right:0em;
+  top: 0.25em;
+  font-size:1em;
+  font-weight:bold;
+}
+
+.proofTreeAddSubproof {
+  display:table-cell;
+  text-align:center;
+  vertical-align:middle;
+  width:auto;
+  padding:0px 3px;
+  font-weight:bold;
+  float:right;
+  margin-top:-2em;
+}
+
+.proofTreeSideCondition {
+  float:left;
+  position:relative;
+  border:1px solid black;
+  margin-top:-2em;
+  width:80%;
+}

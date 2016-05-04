@@ -1,0 +1,42 @@
+==================================================================
+= Grade Report
+= Net ID: szhao28
+==================================================================
+= Base Grade: 10 points
+= Point Adjustments: 0
+==================================================================
+= Final Grade: 10
+==================================================================
+= Comments
+==================================================================
+
+==================================================================
+= Autograder Output
+==================================================================
+
+Running tests for Given Cases.
+Passed Test: IntExp 10
+Passed Test: AppExp (LamExp "x" (PlusExp (VarExp "x") (VarExp "y"))) (IntExp 15)
+Passed Test: AppExp (LamExp "y" (PlusExp (VarExp "x") (VarExp "y"))) (IntExp 15)
+Passed Test: AppExp (LamExp "z" (PlusExp (VarExp "x") (VarExp "y"))) (IntExp 15)
+Passed Test: AppExp (VarExp "f") (IntExp 10)
+
+==================================================================
+= Original Code
+==================================================================
+
+module Midterm2 where
+import Lib
+eval :: Exp -> Env -> Val
+eval (IntExp i) _ = IntVal i
+eval (LamExp param body) env = CloVal param body env
+eval (PlusExp e1 e2) env =
+  case (eval e1 env, eval e2 env) of
+    (IntVal i1, IntVal i2) -> IntVal $ i1 + i2
+    _ -> IntVal 0
+
+eval (VarExp str) env = case lookup str env of
+                         Just x -> x
+                         Nothing -> IntVal 0
+eval (AppExp e1 e2) env = case (eval e1 env) of 
+          CloVal para body cenv -> eval body (insert para (eval e2 env) cenv) 
