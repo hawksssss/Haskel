@@ -13,5 +13,5 @@
 = prooftree-bigstep-sej01                           20 points
 = unification                                       16 points
 =============================================================
-= Final Grade:                                   72/88 points
+= Final Grade:                                   72/72 points
 =============================================================
