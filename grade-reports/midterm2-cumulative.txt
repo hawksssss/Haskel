@@ -1,0 +1,17 @@
+=============================================================
+= Midterm 2 Grade Report for szhao28
+=============================================================
+
+
+=============================================================
+= Per-Question Breakdown
+=============================================================
+= code-hs-cps-sumListk                              10 points
+= code-hs-interpreters-actual                       10 points
+= hoareLogic                                         2 points
+= multiple-choice                                   14 points
+= prooftree-bigstep-sej01                           20 points
+= unification                                       16 points
+=============================================================
+= Final Grade:                                   72/88 points
+=============================================================
