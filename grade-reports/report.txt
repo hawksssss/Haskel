@@ -1,5 +1,5 @@
 Grade Report for Shan Zhao
-Produced 2016-05-10 17:27
+Produced 2016-05-11 18:27
 Netid: szhao28 uin: 678895860
 Course: cs421 (2016-01)  Section: B3  CRN: 31375
 
@@ -22,7 +22,7 @@ Course: cs421 (2016-01)  Section: B3  CRN: 31375
                           Final Pending     100                        
                   MP1 - Haskell  Graded 116 126  92.06% 0.0150  1.3810 
                   ML1 - Haskell  Graded  50  50 100.00% 0.0150  1.5000 
-              MP2 - Interpreter  Graded 315 315 100.00% 0.0300  3.0000 
+              MP2 - Interpreter  Graded  71  75  94.67% 0.0300  2.8400 
                       MP3 - CPS  Graded  37  38  97.37% 0.0150  1.4605 
                       ML2 - CPS Pending     100                        
                    MP4 - Scheme Pending     100                        
@@ -42,4 +42,4 @@ Higher Order Functions Activity  Graded   1   1 100.00% 0.0045  0.4545
             LR Parsing Activity  Graded 100 100 100.00% 0.0045  0.4545 
            Unification Activity  Graded   1   1 100.00% 0.0045  0.4545 
 ------------------------------- ------- --- --- ------- ------ ------- 
-                          Total                  99.57% 1.0000 99.5665 
+                          Total                  99.41% 1.0000 99.4065 
