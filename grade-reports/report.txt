@@ -1,24 +1,25 @@
 Grade Report for Shan Zhao
-Produced 2016-05-11 18:27
+Produced 2016-05-12 14:05
 Netid: szhao28 uin: 678895860
 Course: cs421 (2016-01)  Section: B3  CRN: 31375
 
                      Assignment  Status Raw Max    Norm Weight  Points 
 ------------------------------- ------- --- --- ------- ------ ------- 
-    MT 1 -       Haskell Guards  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 -     Haskell Patterns  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 -           Using HOFs  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 -         Writing HOFs  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 -            Recursion  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 -       Tail Recursion  Graded  10  10 100.00% 0.0545  5.4545 
-    MT 1 - Algebraic Data Types  Graded  20  20 100.00% 0.0545  5.4545 
-    MT 1 -      Lambda Calculus  Graded   8   8 100.00% 0.0545  5.4545 
-                     MT 2 - CPS  Graded  10  10 100.00% 0.0727  7.2727 
-            MT 2 - Interpreters  Graded  10  10 100.00% 0.0727  7.2727 
-             MT 2 - Hoare Logic  Graded  10  10 100.00% 0.0727  7.2727 
-             MT 2 - LL Grammars Pending      10                        
-       MT 2 - Bigstep Semantics  Graded  20  20 100.00% 0.0727  7.2727 
-             MT 2 - Unification  Graded  16  16 100.00% 0.0727  7.2727 
+    MT 1 -       Haskell Guards  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 -     Haskell Patterns  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 -           Using HOFs  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 -         Writing HOFs  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 -            Recursion  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 -       Tail Recursion  Graded  10  10 100.00% 0.0500  5.0000 
+    MT 1 - Algebraic Data Types  Graded  20  20 100.00% 0.0500  5.0000 
+    MT 1 -      Lambda Calculus  Graded   8   8 100.00% 0.0500  5.0000 
+     MT 2 -                 CPS  Graded  10  10 100.00% 0.0571  5.7143 
+     MT 2 -        Interpreters  Graded  10  10 100.00% 0.0571  5.7143 
+     MT 2 -         Hoare Logic  Graded   2   2 100.00% 0.0571  5.7143 
+     MT 2 -         LL Grammars  Graded  10  10 100.00% 0.0571  5.7143 
+     MT 2 - Smallstep Semantics  Graded   4   4 100.00% 0.0571  5.7143 
+     MT 2 -   Bigstep Semantics  Graded  20  20 100.00% 0.0571  5.7143 
+     MT 2 -         Unification  Graded  16  16 100.00% 0.0571  5.7143 
                           Final Pending     100                        
                   MP1 - Haskell  Graded 116 126  92.06% 0.0150  1.3810 
                   ML1 - Haskell  Graded  50  50 100.00% 0.0150  1.5000 
