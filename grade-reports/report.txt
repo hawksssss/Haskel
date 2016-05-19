@@ -1,38 +1,39 @@
 Grade Report for Shan Zhao
-Produced 2016-05-19 12:48
+Produced 2016-05-19 13:36
 Netid: szhao28 uin: 678895860
 Course: cs421 (2016-01)  Section: B3  CRN: 31375
 
                        Assignment  Status Raw Max    Norm Weight  Points 
 --------------------------------- ------- --- --- ------- ------ ------- 
-      MT 1 -       Haskell Guards  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 -     Haskell Patterns  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 -           Using HOFs  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 -         Writing HOFs  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 -            Recursion  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 -       Tail Recursion  Graded  10  10 100.00% 0.0333  3.3333 
-      MT 1 - Algebraic Data Types  Graded  20  20 100.00% 0.0333  3.3333 
-      MT 1 -      Lambda Calculus  Graded   8   8 100.00% 0.0333  3.3333 
-       MT 2 -                 CPS  Graded  10  10 100.00% 0.0381  3.8095 
-       MT 2 -        Interpreters  Graded  10  10 100.00% 0.0381  3.8095 
-       MT 2 -         Hoare Logic  Graded   2   2 100.00% 0.0381  3.8095 
-       MT 2 -         LL Grammars  Graded  10  10 100.00% 0.0381  3.8095 
-       MT 2 - Smallstep Semantics  Graded   4   4 100.00% 0.0381  3.8095 
-       MT 2 -   Bigstep Semantics  Graded  20  20 100.00% 0.0381  3.8095 
-       MT 2 -         Unification  Graded  16  16 100.00% 0.0381  3.8095 
-   Final -                   ADTs  Graded  10  10 100.00% 0.0205  2.0513 
-   Final -                    CPS  Graded  10  10 100.00% 0.0205  2.0513 
-   Final - Higher Order Functions  Graded  10  10 100.00% 0.0205  2.0513 
-   Final -            Interpreter  Graded 140 140 100.00% 0.0205  2.0513 
-   Final -         Tail Recursion  Graded  10  10 100.00% 0.0205  2.0513 
-   Final -                 Prolog  Graded  10  10 100.00% 0.0205  2.0513 
-   Final -            Hoare Logic  Graded   2   2 100.00% 0.0205  2.0513 
-   Final -       Variable Scoping  Graded   2   2 100.00% 0.0205  2.0513 
-   Final -             Parameters  Graded  18  18 100.00% 0.0205  2.0513 
-   Final -        Lambda Calculus  Graded   8  10  80.00% 0.0205  1.6410 
-   Final -   Small Step Semantics  Graded   4   4 100.00% 0.0205  2.0513 
-   Final -             LL Parsing  Graded   6   6 100.00% 0.0205  2.0513 
-   Final -            Unification  Graded  16  16 100.00% 0.0205  2.0513 
+      MT 1 -       Haskell Guards  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 -     Haskell Patterns  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 -           Using HOFs  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 -         Writing HOFs  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 -            Recursion  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 -       Tail Recursion  Graded  10  10 100.00% 0.0325  3.2500 
+      MT 1 - Algebraic Data Types  Graded  20  20 100.00% 0.0325  3.2500 
+      MT 1 -      Lambda Calculus  Graded   8   8 100.00% 0.0325  3.2500 
+       MT 2 -                 CPS  Graded  10  10 100.00% 0.0371  3.7143 
+       MT 2 -        Interpreters  Graded  10  10 100.00% 0.0371  3.7143 
+       MT 2 -         Hoare Logic  Graded   2   2 100.00% 0.0371  3.7143 
+       MT 2 -         LL Grammars  Graded  10  10 100.00% 0.0371  3.7143 
+       MT 2 - Smallstep Semantics  Graded   4   4 100.00% 0.0371  3.7143 
+       MT 2 -   Bigstep Semantics  Graded  20  20 100.00% 0.0371  3.7143 
+       MT 2 -         Unification  Graded  16  16 100.00% 0.0371  3.7143 
+   Final -                   ADTs  Graded  10  10 100.00% 0.0200  2.0000 
+   Final -                    CPS  Graded  10  10 100.00% 0.0200  2.0000 
+   Final - Higher Order Functions  Graded  10  10 100.00% 0.0200  2.0000 
+   Final -            Interpreter  Graded 140 140 100.00% 0.0200  2.0000 
+   Final -         Tail Recursion  Graded  10  10 100.00% 0.0200  2.0000 
+   Final -                 Prolog  Graded  10  10 100.00% 0.0000  2.0000 
+   Final -            Hoare Logic  Graded   2   2 100.00% 0.0200  2.0000 
+   Final -       Variable Scoping  Graded   2   2 100.00% 0.0200  2.0000 
+   Final -             Parameters  Graded  18  18 100.00% 0.0200  2.0000 
+   Final -        Lambda Calculus  Graded   8  10  80.00% 0.0200  1.6000 
+   Final -   Small Step Semantics  Graded   4   4 100.00% 0.0200  2.0000 
+   Final -     Big Step Semantics  Graded  20  20 100.00% 0.0200  2.0000 
+   Final -             LL Parsing  Graded   6   6 100.00% 0.0200  2.0000 
+   Final -            Unification  Graded  16  16 100.00% 0.0200  2.0000 
                     MP1 - Haskell  Graded 116 126  92.06% 0.0115  1.0623 
                     ML1 - Haskell  Graded  50  50 100.00% 0.0115  1.1538 
                 MP2 - Interpreter  Graded  71  75  94.67% 0.0231  2.1846 
@@ -57,4 +58,4 @@ Course: cs421 (2016-01)  Section: B3  CRN: 31375
   Extra Credit - Class Transcribe Missing   0   5   0.00% 0.0000  0.0000 
 Extra Credit - Lecture Assessment Missing   0   1   0.00% 0.0000  0.0000 
 --------------------------------- ------- --- --- ------- ------ ------- 
-                            Total                  99.13% 1.0000 99.1332 
+                            Total                 101.17% 0.9800 99.1434 
